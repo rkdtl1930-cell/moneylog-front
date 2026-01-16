@@ -1,0 +1,34 @@
+/* 탭 영역 전체 스타일 */
+.nav-tabs {
+  border-bottom: 2px solid #D1D8E0 !important; 
+  margin-bottom: 1rem;
+}
+
+/* 기본 탭 (비활성) */
+.nav-tabs .nav-link {
+  color: #1F2A44 !important;        
+  font-weight: 500;
+  background-color: #D1F0F0;         
+  border-radius: 6px 6px 0 0;
+  border: none;                      
+  transition: all 0.2s ease-in-out;
+}
+
+/* 탭 hover */
+.nav-tabs .nav-link:hover {
+  color: #1F2A44 !important;
+  background-color: #B3E0E0 !important;
+}
+
+/* 활성 탭 */
+.nav-tabs .nav-link.active {
+  color: #FFFFFF !important;   
+  background-color: #6CCFCF !important; 
+  font-weight: 600;
+  border-bottom: 2px solid #58b8b8 !important;
+}
+
+/* 탭 컨테이너 패딩 및 그림자 */
+.nav-tabs .nav-item {
+  margin-right: 0.5rem;
+}
