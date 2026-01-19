@@ -1,7 +1,7 @@
 @import './styles/reset.css';
 @import './styles/fonts.css';
 :root {
-  --main-color: #0194D2;
+  --main-color: #157AFF;
   --sub-color:#CEF74F;
 }
 *{letter-spacing: -0.75px;}

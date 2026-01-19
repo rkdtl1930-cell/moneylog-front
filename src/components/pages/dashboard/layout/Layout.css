@@ -1,0 +1,29 @@
+/*대시보드 전체 레이아웃*/
+.dashboard-layout{background: #ececec; width: 100%; height: 100vh;}
+.sidebar{width: 250px; height: 100%; position: absolute; left: 0; top: 0; background-color: #fff; padding: 50px 0; border-radius: 0 50px 50px 0;
+display: flex; justify-content: space-between; flex-direction: column;}
+.sidebar h1 img{max-width: 150px; display: block; margin: 0 auto; width: 100%;}
+.sidebar .menu{display: flex; gap: 30px; margin-top: 50px; flex-direction: column;}
+.sidebar .menu > a{display: flex; align-items: center; gap: 12px; position: relative; padding: 0 20px;}
+.sidebar .menu > a span{font-size: 15px; color: #999; margin-top: 4px;}
+.sidebar .menu > a.active span{color: var(--main-color); font-weight: 600; }
+.sidebar .menu > a.active:after{content: ""; display: block; width: 2px; height: 100%; background: var(--main-color); position: absolute; left: 0; top: 0;}
+
+
+.main-content{padding: 50px 450px 50px 300px;}
+.main-content > h1{font-family: "Open Sans", sans-serif; margin-bottom: 30px; font-size: 24px;}
+
+.balance-wrap{padding: 0 20px;}
+.balance-wrap .balance-header{display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;}
+.balance-wrap .balance-header button{display: block;  background: #fff; border: 1px solid #051f2b; outline: none; font-size: 12px;
+color: #fff; padding: 4px 8px; border-radius: 4px; color: #051f2b;}
+.balance-wrap .balance-box{background: linear-gradient(135deg, #013A53 0%, #00B3FF 100%),  url(/images/landing/lines.png);
+  background-size: cover; background-blend-mode: overlay;  border-radius: 12px; background-position: center bottom; padding: 20px;}
+.balance-wrap .month{font-size: 13px;  color: #4e4e4e;}
+.balance-wrap .balance-box p{color: #fff; font-size: 12px;}
+.balance-wrap .empty-text{text-align: center;}
+.balance-wrap .balance-box .amount{color: #fff; text-align: right;}
+.balance-wrap .balance-box .amount span{font-size: 50px;}
+
+.progress-wrap .progress-bar{width: 100%; height: 5px; background: #e2e2e2; border-radius: 12px; margin-top: 10px;}
+.progress-wrap .progress-text{margin-top: 2px; text-align: right; color: #999;}

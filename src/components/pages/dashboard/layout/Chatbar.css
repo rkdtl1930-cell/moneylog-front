@@ -1,0 +1,38 @@
+/*대시보드 챗봇 bar*/
+/* 챗바 컨테이너 */
+.chatbar {background: white; border-left: 1px solid #ddd;
+  position: absolute; right:0; top:0; width: 400px; height: 100vh; transition: transform 0.3s ease; }
+.chatbar.open {transform: translateX(0);}
+.chatbar.closed {transform: translateX(100%);}
+.chatbar .toggle-btn {
+  position: absolute;left: -50px; top: 50px; width: 40px; height: 40px;border: none; border-radius: 8px 0 0 8px;
+  cursor: pointer; font-size: 18px; font-weight: bold; z-index: 10; transition: background 0.2s;  background: transparent;}
+.chatbar .toggle-btn img{width: 50px;}
+
+/* 채팅 내부 */
+.chatbar .chat-inner {display: flex; flex-direction: column; height: 100%; padding: 50px 20px 20px;}
+.chatbar .chat-header {
+  margin-bottom: 20px;
+}
+.chatbar .chat-header h3 {margin: 0 0 8px 0;font-size: 22px;color: #333;  font-family: "Open Sans", sans-serif;}
+.chatbar .chat-header p {margin: 0; font-size: 13px;color: #666;}
+
+/* 메시지 영역 */
+.chatbar .chat-messages {flex: 1;overflow-y: auto;background: #f9f9f9; border-radius: 12px; margin-bottom: 16px;}
+/* 개별 메시지 */
+.chatbar .msg {margin-bottom: 12px; padding: 10px 14px; border-radius: 12px; max-width: 80%;font-size: 14px; line-height: 1.5; width: fit-content;}
+/* 봇 메시지 - 왼쪽 */
+.chatbar .msg.bot {background: white; border: 1px solid #ddd; margin-right: auto;}
+/* 사용자 메시지 - 오른쪽 */
+.chatbar .msg.user { background: #e1d1fc; margin-left: auto;text-align: right;}
+/* 입력창 */
+.chatbar .chat-input { display: flex; gap: 8px; padding: 12px;background: white; border: 2px solid #ddd; border-radius: 12px;transition: border-color 0.2s;}
+.chatbar .chat-input:focus-within {border-color: var(--main-color); border-width: 1px;}
+.chatbar .chat-input input {flex: 1;border: none;outline: none;font-size: 14px;background: transparent;}
+.chatbar .chat-input input::placeholder {color: #999;}
+.chatbar .chat-input button {padding: 8px 16px;background: var(--main-color);border: none;border-radius: 8px;cursor: pointer;
+  font-weight: 500;transition: background 0.2s; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;}
+
+.chatbar .chat-messages::-webkit-scrollbar {width: 6px;}
+.chatbar .chat-messages::-webkit-scrollbar-thumb {background: #ddd;border-radius: 3px;}
+.chatbar .chat-messages::-webkit-scrollbar-thumb:hover {background: #ccc;}

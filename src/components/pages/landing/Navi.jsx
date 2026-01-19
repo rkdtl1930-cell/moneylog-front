@@ -74,7 +74,7 @@ export default function Navi(){
             <div className=''>
               <ul>
                 <li className=''>
-                  <NavLink to='' className=''>
+                  <NavLink to='/dashboard/main' className=''>
                     {currentUser.name}
                   </NavLink>
                 </li>

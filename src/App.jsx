@@ -22,6 +22,11 @@ import Home2 from './components/pages/landing/Main'
 import Home from './components/pages/landing/Main'
 import NoticeList from './components/pages/landing/notice/NoticeList'
 import NoticeView from './components/pages/landing/notice/NoticeView'
+import DashboardLayout from './components/pages/dashboard/layout/DashboardLo'
+import Dashboard from './components/pages/dashboard/content/Dashboard'
+import Expense from './components/pages/dashboard/content/Expense'
+import Statistics from './components/pages/dashboard/content/Statistics'
+import Setting from './components/pages/dashboard/content/Setting'
 
 function App() {
 
@@ -59,6 +64,17 @@ function App() {
         <Route path='/404' element={<NotFound/>}/>
         <Route path='*' element={<NotFound/>}/>
         <Route path='/401' element={<UnAuthorized/>}/>
+
+         {/* 유빈 수정*/}
+        <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <DashboardLayout />
+                </PrivateRoute>}>
+        <Route path="main" element={<Dashboard />} /> {/* /dashboard/main */}
+        <Route path="expense" element={<Expense />} /> {/* /dashboard/expense */}
+        <Route path="statistics" element={<Statistics />} /> {/* /dashboard/statistics */}
+        <Route path="setting" element={<Setting />} /> {/* /dashboard/setting */}
+      </Route>
       </Routes>
     </>
   )
