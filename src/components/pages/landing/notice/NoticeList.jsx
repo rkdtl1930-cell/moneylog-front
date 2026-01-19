@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import noticeService from "../../../services/notice.service";
 
+
+
 export default function NoticeList(){
   const [notices, setNotices] = useState([]);
   const [page, setPage] = useState(1);

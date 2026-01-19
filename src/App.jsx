@@ -46,6 +46,10 @@ function App() {
 
         {/* 로그인 필요하지만 누르면 알아서 로그인 창으로 이동하게 함 */}
         <Route path='/notice/view/:id' element={<NoticeView/>}/>
+        <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
+        <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
+        <Route path='/board/list' element={<BoardList/>}/>
+
 
 
         {/* 로그인 필요 페이지 */}
