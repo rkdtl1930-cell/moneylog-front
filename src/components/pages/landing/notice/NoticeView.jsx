@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
-import noticeService from "../../services/notice.service";
 import { useEffect, useState } from "react";
-import useUserStore from "../../store/useUserStore";
+import useUserStore from "../../../store/useUserStore";
+import noticeService from "../../../services/notice.service";
 
 export default function NoticeView(){
   const {id} = useParams();

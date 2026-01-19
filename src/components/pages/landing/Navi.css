@@ -1,0 +1,17 @@
+/* 랜딩페이지 > 메뉴*/
+.top-navi {padding: 20px 0;  position: absolute; top: 0; left: 0; width: 100%; transition: all .3s;}
+.top-navi .inner{padding: 0 50px; display: flex; align-items: center; justify-content: space-between;}
+.top-navi .leftBox{display: flex; gap: 50px; align-items: center;}
+.top-navi .gnb{display: flex; gap: 20px;}
+.top-navi .gnb a{font-size: 17px; color: #fff;}
+.top-navi .rightBox ul{display: flex; align-items: center; gap: 20px;}
+.top-navi .rightBox a{font-size: 16px; color: #fff;}
+
+
+/* 랜딩페이지 > 메뉴(스크롤 이벤트)*/
+.top-navi.scrolled{position: fixed; width: 100%; top: 0; left: 0; background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px); z-index: 10;}
+.top-navi.scrolled .gnb a,
+.top-navi.scrolled .sub a{color: #333;}

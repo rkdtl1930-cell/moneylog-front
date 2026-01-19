@@ -1,0 +1,184 @@
+@charset "utf-8";
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+    letter-spacing: -0.8px;
+    font-family: 'Pretendard';
+    font-weight: 500;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+body{-webkit-text-size-adjust:none}
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.hidden , .blind {
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: inherit;
+}
+
+html {
+    /* Prevent font scaling in landscape */
+    -webkit-text-size-adjust: none; /*Chrome, Safari, newer versions of Opera*/
+    -moz-text-size-adjust: none; /*Firefox*/
+    -ms-text-size-adjust: none; /*Ie*/
+    -o-text-size-adjust: none; /*old versions of Opera*/
+}
+
+/*
+
+body{
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+*/
+img {
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+
+caption{
+    position: absolute !important;
+    top:auto;
+    left:-10000px;
+    width:1px;
+    height:1px;
+    overflow:hidden;
+}
+
+
+::selection {
+    background: #9891f9;
+    color: #e9e8fa !important;
+}
+
+::-moz-selection {
+    background: #9891f9;
+    color: #e9e8fa !important;
+}
+
+* {box-sizing: border-box;}
+
+html, body {
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    line-height: 1.3;
+    font-size: 62.5%;
+    color: var( --font-color);
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 이미지 리사이징 화질 개선 이미지 렌더링 */
+img[src$=".gif"], img[src$=".png"] {
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:  -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+
+div {
+    image-rendering: -moz-crisp-edges;         /* Firefox */
+    image-rendering:   -o-crisp-edges;         /* Opera */
+    image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+    image-rendering: crisp-edges;
+    -ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+
+.fs-h1 {font-size: 4.8rem;}
+.fs-h2 {font-size: 4rem;}
+.fs-h3 {font-size: 3rem;}
+.fs-h4 {font-size: 2rem;}
+.fs-18 {font-size: 1.8rem;}
+.fs-16 {font-size: 1.6rem;}
+.fs-15 {font-size: 1.5rem;}
+.fs-14 {font-size: 1.4rem;}
+.fs-13 {font-size: 1.3rem;}
+
+.mt40 {margin-top: 4rem !important;}
+.mb20 {margin-bottom: 2rem !important;}
+.mb40 {margin-bottom: 4rem !important;}
+.mb60 {margin-bottom: 6rem !important;}
+.mb80 {margin-bottom: 8rem !important;}
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
