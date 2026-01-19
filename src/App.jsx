@@ -27,6 +27,7 @@ import Dashboard from './components/pages/dashboard/content/Dashboard'
 import Expense from './components/pages/dashboard/content/Expense'
 import Statistics from './components/pages/dashboard/content/Statistics'
 import Setting from './components/pages/dashboard/content/Setting'
+import BoardList from './components/pages/landing/board/BoardList'
 
 function App() {
 
@@ -49,8 +50,6 @@ function App() {
         <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
         <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
         <Route path='/board/list' element={<BoardList/>}/>
-
-
 
         {/* 로그인 필요 페이지 */}
         <Route path='/admin' element={<PrivateRoute><Admin/></PrivateRoute>}/>
