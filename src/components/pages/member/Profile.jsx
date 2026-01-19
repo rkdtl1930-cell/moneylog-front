@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button, Tab, Tabs } from "react-bootstrap";
 import "./Profile.css"
 import { useNavigate } from "react-router-dom";
+import Budget from "../budget/Budget";
 
 export default function Profile(){
   const [activeKey, setActiveKey] = useState("member");
@@ -9,6 +10,9 @@ export default function Profile(){
   return(<>
     <div className="container mt-4">
       <Tabs id="profile-tabs" activeKey={activeKey} onSelect={(k)=>setActiveKey(k)} className="mb-3" fill>
+        <Tab eventKey="budget" title="예산">
+          <Budget/>
+        </Tab>
         <Tab eventKey="member" title="회원정보">
           <div className="mt-3">
             <h5>회원정보 관리</h5>
