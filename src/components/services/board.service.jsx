@@ -22,7 +22,7 @@ class BoardService {
   }
 
   getBoards(page, size) {
-  return axios.get(`${BASE_URL}/list`, { params: { page, size } });
+  return axios.get(`${BASE_URL}/list`, { params: { page, size }, headers: authHeader() });
   }
 }
 

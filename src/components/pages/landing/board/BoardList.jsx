@@ -28,7 +28,7 @@ export default function BoardList() {
     fetch();
   }, [page]);
 
-  // ✅ 노티스랑 똑같은 페이지 블럭 로직
+  // 노티스랑 똑같은 페이지 블럭 로직
   const maxButtons = 5;
   const currentBlock = Math.floor((page - 1) / maxButtons);
   const startPage = currentBlock * maxButtons + 1;
@@ -48,7 +48,7 @@ export default function BoardList() {
     if (nextBlockFirstPage <= totalPages) setPage(nextBlockFirstPage);
   };
 
-  // ✅ 첨부 여부: DTO 필드명 확정되면 하나만 남기면 됨
+  // 첨부 여부: DTO 필드명 확정되면 하나만 남기면 됨
   const hasAttachment = (b) => {
     return (
       (typeof b.attachmentCount === "number" && b.attachmentCount > 0) ||
@@ -117,7 +117,7 @@ export default function BoardList() {
         </button>
       </div>
 
-      {/* ✅ 노티스랑 동일한 페이지네이션 UI */}
+      {/* 노티스랑 동일한 페이지네이션 UI */}
       <nav aria-label="Page navigation">
         <ul className="pagination justify-content-center">
           {page > 1 && (
