@@ -204,7 +204,7 @@ export default function Sidebar() {
         </div>
 
         <div className="popup-body">
-          <div>
+          <div className='form-group'>
             <label>예산 금액</label>
             <input
               type="number"

@@ -1,14 +1,19 @@
 .popup-overlay {
   position: fixed;inset: 0;background: rgba(0, 0, 0, 0.5);
   z-index: 1000;display: flex;align-items: center;justify-content: center;}
+.popup-body, .popup-body form{display: flex; flex-direction: column; gap: 4px;}
 .popup-content {background: #fff;border-radius: 12px;
   padding: 24px;max-width: 400px; width: 100%; position: relative;}
 .popup-content .popup-header{margin-bottom: 20px;}
 .popup-content .popup-header h3{font-size: 17px;}
 .popup-content .popup-header .close-btn{position: absolute; top: 20px; right: 20px; font-size: 17px; border: none;}
-.popup-content .popup-body > div{display: flex; gap: 20px; align-items: center;}
-.popup-content .popup-body > div label{font-size: 12px; color: #999; width: 50px;}
-.popup-content .popup-body > div input{padding: 12px; font-size: 14px; width: calc(100% - 50px); border: 1px solid #999; border-radius: 12px;}
+.popup-content .popup-body .form-group{width: 100%; display: flex; gap: 20px; align-items: center;}
+.popup-content .popup-body > div,
+.popup-content .popup-body form{display: flex; gap: 20px; align-items: center;}
+.popup-content .popup-body .form-group label{font-size: 12px; color: #999; width: 50px;}
+.popup-content .popup-body .form-group input,
+.popup-content .popup-body .form-group select, .popup-content .popup-body .form-group textarea{padding: 12px; font-size: 14px; width: calc(100% - 50px); border: 1px solid #999; border-radius: 6px;}
+.popup-content .popup-body .form-group textarea{height: 200px; resize: none;}
 .popup-content .popup-footer{display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 20px;}
 .btn{padding: 6px 12px; font-size: 14px; border-radius: 4px; border: none;}
 .btn.primary{border: 1px solid var(--main-color); color: var(--main-color);}

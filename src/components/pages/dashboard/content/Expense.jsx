@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import useUserStore from "../../../store/useUserStore";
 import transactionService from "../../../services/transaction.service";
 import './Content.css'
+import Popup from "../popup/Popup";
 
 export default function Expense() {
   const currentUser = useUserStore((state) => state.user);
@@ -137,14 +138,15 @@ export default function Expense() {
 
                 <tbody>
                   {transactions.map((t) => (
-                    <tr
-                      key={t.id}
-                      className={t.type === "INCOME" ? "text-success" : "text-danger"}
-                    >
+                    <tr key={t.id}>
                       <td>{t.date}</td>
                       <td>{t.category}</td>
-                      <td>{t.type}</td>
-                      <td>{t.amount.toLocaleString()}원</td>
+                      <td className={t.type === "INCOME" ? "income" : "expense"}>
+                        <span>{t.type === "INCOME" ? "수입" : "지출"}</span>
+                      </td>
+                      <td>
+                        {t.amount.toLocaleString()}원
+                      </td>
                       <td>{t.memo || "-"}</td>
                       <td className="btn-box">
                         <button
@@ -175,98 +177,96 @@ export default function Expense() {
               </table>
             </div>
           </div>
-          {/* <ul className="list-group mb-2">
-            <li className="list-group-item d-flex fw-bold">
-              <div className="col-2">날짜</div>
-              <div className="col-2">카테고리</div>
-              <div className="col-2">수입&지출</div>
-              <div className="col-2">금액</div>
-              <div className="col-2">메모</div>
-              <div className="col-2">관리</div>
-            </li>
-          </ul>
-          <ul className="list-group mb-3">
-            {transactions.map((t) => (
-              <li key={t.id} className={`list-group-item d-flex justify-content-between align-items-start ${t.type === "INCOME" ? "text-success" : "text-danger"}`}>
-                <div className="col-2">{t.date}</div>
-                <div className="col-2">{t.category}</div>
-                <div className="col-2">{t.type}</div>
-                <div className="col-2">{t.amount.toLocaleString()}원</div>
-                <div className="col-2">{t.memo || "-"}</div>
-                <div className="col-2">
-                  <button className="btn btn-sm btn-warning me-2"
-                    onClick={() => {
-                      setEditTransaction(t);
-                      setEditModalOpen(true);
-                    }}>
-                    수정
-                  </button>
-                  <button className="btn btn-sm btn-danger" onClick={async () => {
-                    if (window.confirm("정말로 삭제하시겠습니까?")) {
-                      await transactionService.delete(t.id);
-                      fetchTransactions();
-                    }
-                  }}>삭제</button>
-                </div>
-              </li>
-            ))}
-          </ul> */}
         </>)}
         {editModalOpen && editTransaction && (
-          <div className="modal show d-block modal-backdrop-custom" tabIndex="-1">
-            <div className="modal-dialog">
-              <div className="modal-content modal-content-custom">
-                <div className="modal-header modal-header-custom">
-                  <h5 className="modal-title">트랜잭션 수정</h5>
-                  <button type="button" className="btn-close" onClick={() => setEditModalOpen(false)}></button>
-                </div>
-                <div className="modal-body modal-body-custom">
-                  <div className="mb-3">
-                    <label className="form-label">날짜</label>
-                    <input type="date" className="form-control"
-                      value={editTransaction.date}
-                      onChange={(e) => setEditTransaction({ ...editTransaction, date: e.target.value })} />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">카테고리</label>
-                    <input type="text" className="form-control"
-                      value={editTransaction.category}
-                      onChange={(e) => setEditTransaction({ ...editTransaction, category: e.target.value })} />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">타입</label>
-                    <select className="form-select"
-                      value={editTransaction.type}
-                      onChange={(e) => setEditTransaction({ ...editTransaction, type: e.target.value })}>
-                      <option value="INCOME">수입</option>
-                      <option value="EXPENSE">지출</option>
-                    </select>
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">금액</label>
-                    <input type="number" className="form-control"
-                      value={editTransaction.amount}
-                      onChange={(e) => setEditTransaction({ ...editTransaction, amount: Number(e.target.value) })} />
-                  </div>
-                  <div className="mb-3">
-                    <label className="form-label">메모</label>
-                    <input type="text" className="form-control"
-                      value={editTransaction.memo || ""}
-                      onChange={(e) => setEditTransaction({ ...editTransaction, memo: e.target.value })} />
-                  </div>
-                </div>
-                <div className="modal-footer modal-footer-custom">
-                  <button className="btn btn-secondary" onClick={() => setEditModalOpen(false)}>취소</button>
-                  <button className="btn btn-primary" onClick={async () => {
-                    await transactionService.modify(editTransaction);
-                    setEditModalOpen(false);
-                    fetchTransactions();
-                  }}>저장</button>
-                </div>
+          <Popup open={editModalOpen} onClose={() => setEditModalOpen(false)}>
+            <div className="popup-header">
+              <h3>거래내역 수정</h3>
+              <button className="close-btn" onClick={() => setEditModalOpen(false)}>
+                ×
+              </button>
+            </div>
+
+            <div className="popup-body">
+              <div className="form-group">
+                <label>날짜</label>
+                <input
+                  type="date"
+                  value={editTransaction.date}
+                  onChange={(e) =>
+                    setEditTransaction({ ...editTransaction, date: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label>카테고리</label>
+                <input
+                  type="text"
+                  value={editTransaction.category}
+                  onChange={(e) =>
+                    setEditTransaction({ ...editTransaction, category: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label>타입</label>
+                <select
+                  value={editTransaction.type}
+                  onChange={(e) =>
+                    setEditTransaction({ ...editTransaction, type: e.target.value })
+                  }
+                >
+                  <option value="INCOME">수입</option>
+                  <option value="EXPENSE">지출</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>금액</label>
+                <input
+                  type="number"
+                  value={editTransaction.amount}
+                  onChange={(e) =>
+                    setEditTransaction({
+                      ...editTransaction,
+                      amount: Number(e.target.value),
+                    })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label>메모</label>
+                <input
+                  type="text"
+                  value={editTransaction.memo || ""}
+                  onChange={(e) =>
+                    setEditTransaction({ ...editTransaction, memo: e.target.value })
+                  }
+                />
               </div>
             </div>
-          </div>
+
+            <div className="popup-footer">
+              <button className="btn close" onClick={() => setEditModalOpen(false)}>
+                취소
+              </button>
+              <button
+                className="btn primary"
+                onClick={async () => {
+                  await transactionService.modify(editTransaction);
+                  setEditModalOpen(false);
+                  fetchTransactions();
+                }}
+              >
+                저장
+              </button>
+            </div>
+          </Popup>
         )}
+
         {transactions.length > 0 && (
           <nav aria-label="Page navigation">
             <ul className="pagination justify-content-center">

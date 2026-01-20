@@ -2,7 +2,7 @@
 
 /* 공통 */
 .card{padding: 20px; background: #fff; border-radius: 6px;}
-.card h5{font-size: 15px; margin-bottom: 12px;}
+.card h5{font-size: 15px; margin-bottom: 12px; font-family: 'Isamanru'; color:#3B4662; font-weight: 300;}
 
 .search-bar{padding: 20px; padding: 6px 12px; background: #fff; display: flex; align-items: center; gap: 10px;
 border-radius: 6px; margin-bottom: 20px;}
@@ -28,3 +28,40 @@ border-radius: 6px; margin-bottom: 20px;}
 .common-table .btn-box{width: 150px;}
 .common-table .edit-btn{color: #0F65C7; border: 1px solid #0F65C7; margin-left: 2px;}
 .common-table .del-btn{color: #E2523F; border: 1px solid #E2523F; margin-left: 2px;}
+.common-table .income > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
+.common-table .expense > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
+
+.pagination{gap:6px; text-align: center; margin-top: 20px;}
+.page-item{}
+.page-item.active .page-link{background:var(--main-color);color:#fff;border-color:var(--main-color)}
+.page-link{border-radius:8px;padding:6px 12px;color:#555;border:1px solid #ddd;background:#fff}
+.page-link:hover{background:#f2f2f2;color:#000}
+.page-link:focus{box-shadow:none}
+
+/* 대시보드 */
+.period-wrap{display: flex; gap: 4px; margin-bottom: 12px; justify-content: space-between;}
+.period-wrap > div{display: flex; gap: 6px; }
+.period-wrap button{padding: 4px; font-size: 14px;  border: 1px solid var(--blue-color); background: #fff; color: var(--blue-color);
+border-radius: 4px; cursor: pointer;}
+.period-wrap button.on{background-color: var(--blue-color); color: #fff; border: 1px solid var(--blue-color);}
+.week{display: flex; align-items: start; margin-top: 20px;}
+.week button{flex: 1; background-color: #fff; border: none; cursor: pointer;}
+.week button .day{font-size: 14px; color: #3B4662; margin-bottom: 4px;}
+.week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; }
+.week button.selected .number{background: #B59CE9; }
+.week button span{display: block; font-size: 12px; font-family: 'Open Sans'; margin-top: 1px;}
+.week button span.income{color: var(--blue-color);}
+.week button span.expense{color: #E2523F;}
+
+.total-box{display: flex; gap: 30px; margin:20px 0;}
+.total-box > div{width: calc((100% - 30px) / 2); background: #fff;}
+.total-box > div > span{font-size: 14px; color: #3B4662; font-family: 'Isamanru'; font-weight: 500;}
+.total-box > div > p{font-size: 17px; text-align: right;}
+
+.date-navi{display: flex; align-items:center; justify-content: space-between;}
+.date-navi h2{font-size: 22px; font-family: 'Isamanru'; font-weight: 300;}
+.date-navi button{background: transparent; border: none; outline: none; cursor: pointer;}
+
+.category-list{display: flex; gap: 30px;}
+.category-list .category-item{flex: 1;}
+.category-list .category-item strong{font-size: 22px;}

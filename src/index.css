@@ -3,9 +3,10 @@
 :root {
   --main-color: #157AFF;
   --sub-color:#CEF74F;
+  --blue-color:#0F65C7
 }
 *{letter-spacing: -0.75px;}
-.btn{padding: 6px 12px; font-size: 14px; border-radius: 4px; border: none; background: none; cursor: pointer;}
+.btn{padding: 6px 12px; font-size: 14px; border-radius: 4px; border: none; background: none; cursor: pointer;  background: #fff;}
 .btn.btn-primary{border: 1px solid var(--main-color); color: var(--main-color); background: #fff;}
 .btn.btn.close{background: #dfdfdf; color: #999;}
 .btn.btn-reset{border: 1px solid #999; color: #636363;}
