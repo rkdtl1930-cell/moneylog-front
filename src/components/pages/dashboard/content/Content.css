@@ -1,0 +1,30 @@
+/* 대시보드 > 콘텐츠 페이지 css*/
+
+/* 공통 */
+.card{padding: 20px; background: #fff; border-radius: 6px;}
+.card h5{font-size: 15px; margin-bottom: 12px;}
+
+.search-bar{padding: 20px; padding: 6px 12px; background: #fff; display: flex; align-items: center; gap: 10px;
+border-radius: 6px; margin-bottom: 20px;}
+.search-bar > div{flex: 1;}
+.search-bar label{color: #666; font-size: 12px; margin-right: 4px;}
+.search-bar input[type="date"]{padding: 12px; width: calc(100% - 40px); border: 1px solid #ddd; font-size: 12px;
+  font-family: 'Open Sans'; border-radius: 6px;
+}
+.search-bar input[type="date"]::-webkit-calendar-picker-indicator,
+.search-bar input[type="date"]::-webkit-inner-spin-button {
+  width: 16px; height: 16px;
+  background: url(/images/dashboard/ico-calendar.svg) no-repeat center / cover} 
+.search-bar .btn-box{display: flex; gap: 2px; width: unset; flex: unset;}
+.search-bar .btn{padding: 10px;}
+
+.no-data{font-size: 15px; color: #666;}
+
+/*테이블 공통*/
+.common-table{width: 100%; text-align: left; font-size: 13px;}
+.common-table tr th{color: #3B4662;}
+.common-table tr th, .common-table tr td{padding: 12px; border-bottom: 1px solid #e4e4e4;}
+.common-table button{padding: 4px 6px; border-radius: 4px; }
+.common-table .btn-box{width: 150px;}
+.common-table .edit-btn{color: #0F65C7; border: 1px solid #0F65C7; margin-left: 2px;}
+.common-table .del-btn{color: #E2523F; border: 1px solid #E2523F; margin-left: 2px;}

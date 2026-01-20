@@ -48,8 +48,7 @@ function App() {
         <Route path='/notice/view/:id' element={<NoticeView/>}/>
         <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
         <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
-        <Route path='/board/list' element={<BoardList/>}/>
-
+        {/* <Route path='/board/list' element={<BoardList/>}/> */}
 
 
         {/* 로그인 필요 페이지 */}

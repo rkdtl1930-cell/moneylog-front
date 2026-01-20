@@ -15,7 +15,7 @@ export default function Login(){
 
   useEffect(()=>{
     if(currentUser?.id)
-      navigate('/profile')
+      navigate('/dashboard/main')
   })
 
   const handleChange = (e) => {
