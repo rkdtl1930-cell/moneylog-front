@@ -9,7 +9,7 @@
 .popup-content .popup-header .close-btn{position: absolute; top: 20px; right: 20px; font-size: 17px; border: none;}
 .popup-content .popup-body .form-group{width: 100%; display: flex; gap: 20px; align-items: center;}
 .popup-content .popup-body > div,
-.popup-content .popup-body form{display: flex; gap: 20px; align-items: center;}
+.popup-content .popup-body form{display: flex; gap: 10px; align-items: center;}
 .popup-content .popup-body .form-group label{font-size: 12px; color: #999; width: 50px;}
 .popup-content .popup-body .form-group input,
 .popup-content .popup-body .form-group select, .popup-content .popup-body .form-group textarea{padding: 12px; font-size: 14px; width: calc(100% - 50px); border: 1px solid #999; border-radius: 6px;}

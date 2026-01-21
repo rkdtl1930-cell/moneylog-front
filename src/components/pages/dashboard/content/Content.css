@@ -3,6 +3,7 @@
 /* 공통 */
 .card{padding: 20px; background: #fff; border-radius: 6px;}
 .card h5{font-size: 15px; margin-bottom: 12px; font-family: 'Isamanru'; color:#3B4662; font-weight: 300;}
+.sub-title{font-size: 17px; margin-bottom: 14px;}
 
 .search-bar{padding: 20px; padding: 6px 12px; background: #fff; display: flex; align-items: center; gap: 10px;
 border-radius: 6px; margin-bottom: 20px;}
@@ -41,7 +42,7 @@ border-radius: 6px; margin-bottom: 20px;}
 /* 대시보드 */
 .period-wrap{display: flex; gap: 4px; margin-bottom: 12px; justify-content: space-between;}
 .period-wrap > div{display: flex; gap: 6px; }
-.period-wrap button{padding: 4px; font-size: 14px;  border: 1px solid var(--blue-color); background: #fff; color: var(--blue-color);
+.period-wrap button{padding: 8px; font-size: 14px;  border: 1px solid var(--blue-color); background: #fff; color: var(--blue-color);
 border-radius: 4px; cursor: pointer;}
 .period-wrap button.on{background-color: var(--blue-color); color: #fff; border: 1px solid var(--blue-color);}
 .week{display: flex; align-items: start; margin-top: 20px;}
@@ -63,5 +64,11 @@ border-radius: 4px; cursor: pointer;}
 .date-navi button{background: transparent; border: none; outline: none; cursor: pointer;}
 
 .category-list{display: flex; gap: 30px;}
-.category-list .category-item{flex: 1;}
+.category-list .category-item{flex: 1; position: relative;}
 .category-list .category-item strong{font-size: 22px;}
+.category-list .category-item span{display: flex; width: 60px; height: 60px; background: #e3f9ff; border-radius: 50%;
+align-items: center; justify-content: center; position: absolute; top: 10px; right: 10px;}
+.category-list .category-item img{max-width: 24px;}
+
+.graph-box{display: flex; gap: 30px;}
+.graph-box > div{flex: 1;}

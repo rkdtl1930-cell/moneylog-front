@@ -250,271 +250,277 @@ const Dashboard = () => {
   return (
     <>
       <h1>Dashboard</h1>
-      <div className="period-wrap">
-        <div>
-          <button onClick={() => setViewMode('daily')} className={`${viewMode === 'daily' ? 'on' : ''}`}>일간뷰</button>
-          <button onClick={() => setViewMode('monthly')} className={`${viewMode === 'monthly' ? 'on' : ''}`}>월간뷰</button>
+      <div className="dash-board-con">
+        <div className="period-wrap">
+          <div>
+            <button onClick={() => setViewMode('daily')} className={`${viewMode === 'daily' ? 'on' : ''}`}>일간뷰</button>
+            <button onClick={() => setViewMode('monthly')} className={`${viewMode === 'monthly' ? 'on' : ''}`}>월간뷰</button>
+          </div>
+          <div>
+            <button onClick={() => openModal(TransactionType.INCOME)}>수입 등록</button>
+            <button onClick={() => openModal(TransactionType.EXPENSE)}>지출 등록</button>
+          </div>
         </div>
-        <div>
-          <button onClick={() => openModal(TransactionType.INCOME)}>수입 등록</button>
-          <button onClick={() => openModal(TransactionType.EXPENSE)}>지출 등록</button>
-        </div>
-      </div>
 
-      {/* 일간뷰 시작 */}
-      {viewMode === 'daily' && (
-        <>
-          <div className="card">
-            <div className="date-navi">
-              <h2 >{getMonthYear()}</h2>
-              <div>
-                <button onClick={() => changeWeek(-1)} disabled={loading}>
-                  <img src="/images/dashboard/cal-left.svg" alt="" />
-                </button>
-                <button onClick={() => changeWeek(1)} disabled={loading}>
-                  <img src="/images/dashboard/cal-right.svg" alt="" />
-                </button>
-              </div>
-            </div>
-            <div className="grid week">
-              {weekDates.map((date, idx) => {
-                const isSelected = isSameDay(date, selectedDate);
-                const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
-                const isSun = date.getDay() === 0;
-                const isSat = date.getDay() === 6;
-                const dateStr = formatDate(date);
-                const dayData = weekData[dateStr] || { income: 0, expense: 0 };
-                return (
-                  <button key={idx} onClick={() => setSelectedDate(date)} disabled={loading} className={`${isSelected ? 'selected' : isToday(date) ? 'today' : ''}`}>
-                    <div className={`day ${isSelected ? 'text-white' : isSun ? 'text-red-500' : isSat ? 'text-blue-500' : 'text-gray-500'}`}>{dayOfWeek}</div>
-                    <div className={`number ${isSelected ? 'text-white' : isToday(date) ? 'text-blue-600' : 'text-gray-800'}`}>
-                      <p>{date.getDate()}</p>
-                    </div>
-                    {(dayData.income > 0 || dayData.expense > 0) && (
-                      <div className="amount-info">
-                        {dayData.income > 0 && <span className="income">+{formatCompactCurrency(dayData.income)}</span>}
-                        {dayData.expense > 0 && <span className="expense">-{formatCompactCurrency(dayData.expense)}</span>}
-                      </div>
-                    )}
+        {/* 일간뷰 시작 */}
+        {viewMode === 'daily' && (
+          <>
+            <div className="card">
+              <div className="date-navi">
+                <h2 >{getMonthYear()}</h2>
+                <div>
+                  <button onClick={() => changeWeek(-1)} disabled={loading}>
+                    <img src="/images/dashboard/cal-left.svg" alt="" />
                   </button>
-                );
-              })}
-            </div>
-          </div>
-          {loading && <div className="loading-wrap"><div className="spinner"></div><p>데이터를 불러오는 중...</p></div>}
-          {error && <div className="error-wrap"><p>{error}</p></div>}
-          {!loading && (
-            <>
-              <div className="total-box">
-                <div className='card'>
-                  <h5 className="">총 수입</h5>
-                  <p className="">{formatCurrency(summary.income)}</p>
-                </div>
-                <div className='card'>
-                  <h5 className="">총 지출</h5>
-                  <p className="">{formatCurrency(summary.expense)}</p>
+                  <button onClick={() => changeWeek(1)} disabled={loading}>
+                    <img src="/images/dashboard/cal-right.svg" alt="" />
+                  </button>
                 </div>
               </div>
-              <div className="history-box">
-                <div className='card'>
-                  <h5>거래내역</h5>
-                  {transactions.length === 0 ? (
-                    <p className="no-data">거래 내역이 없습니다</p>
-                  ) : (
-                    <>
-                      <table className="common-table">
-                        <thead>
-                          <tr>
-                            <th>날짜</th>
-                            <th>카테고리</th>
-                            <th>수입/지출</th>
-                            <th>금액</th>
-                            <th>메모</th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          {transactions.map((t) => (
-                            <tr key={t.id}>
-                              <td>{t.date}</td>
-                              <td>{t.category || "기타"}</td>
-                              <td className={t.type === "INCOME" ? "income" : "expense"}>
-                                <span>{t.type === "INCOME" ? "수입" : "지출"}</span>
-                              </td>
-                              <td className={t.type === "INCOME" ? "income" : "expense"}>
-                                {t.amount.toLocaleString()}원
-                              </td>
-                              <td>{t.memo || "-"}</td>
+              <div className="grid week">
+                {weekDates.map((date, idx) => {
+                  const isSelected = isSameDay(date, selectedDate);
+                  const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+                  const isSun = date.getDay() === 0;
+                  const isSat = date.getDay() === 6;
+                  const dateStr = formatDate(date);
+                  const dayData = weekData[dateStr] || { income: 0, expense: 0 };
+                  return (
+                    <button key={idx} onClick={() => setSelectedDate(date)} disabled={loading} className={`${isSelected ? 'selected' : isToday(date) ? 'today' : ''}`}>
+                      <div className={`day ${isSelected ? 'text-white' : isSun ? 'text-red-500' : isSat ? 'text-blue-500' : 'text-gray-500'}`}>{dayOfWeek}</div>
+                      <div className={`number ${isSelected ? 'text-white' : isToday(date) ? 'text-blue-600' : 'text-gray-800'}`}>
+                        <p>{date.getDate()}</p>
+                      </div>
+                      {(dayData.income > 0 || dayData.expense > 0) && (
+                        <div className="amount-info">
+                          {dayData.income > 0 && <span className="income">+{formatCompactCurrency(dayData.income)}</span>}
+                          {dayData.expense > 0 && <span className="expense">-{formatCompactCurrency(dayData.expense)}</span>}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {loading && <div className="loading-wrap"><div className="spinner"></div><p>데이터를 불러오는 중...</p></div>}
+            {error && <div className="error-wrap"><p>{error}</p></div>}
+            {!loading && (
+              <>
+                <div className="total-box">
+                  <div className='card'>
+                    <h5 className="">총 수입</h5>
+                    <p className="">{formatCurrency(summary.income)}</p>
+                  </div>
+                  <div className='card'>
+                    <h5 className="">총 지출</h5>
+                    <p className="">{formatCurrency(summary.expense)}</p>
+                  </div>
+                </div>
+                <div className="history-box">
+                  <div className='card'>
+                    <h5>거래내역</h5>
+                    {transactions.length === 0 ? (
+                      <p className="no-data">거래 내역이 없습니다</p>
+                    ) : (
+                      <>
+                        <table className="common-table">
+                          <thead>
+                            <tr>
+                              <th>날짜</th>
+                              <th>카테고리</th>
+                              <th>수입/지출</th>
+                              <th>금액</th>
+                              <th>메모</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </>
-                  )}
+                          </thead>
+
+                          <tbody>
+                            {transactions.map((t) => (
+                              <tr key={t.id}>
+                                <td>{t.date}</td>
+                                <td>{t.category || "기타"}</td>
+                                <td className={t.type === "INCOME" ? "income" : "expense"}>
+                                  <span>{t.type === "INCOME" ? "수입" : "지출"}</span>
+                                </td>
+                                <td className={t.type === "INCOME" ? "income" : "expense"}>
+                                  {t.amount.toLocaleString()}원
+                                </td>
+                                <td>{t.memo || "-"}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
+          </>
+        )}
+        {/* 일간뷰 끝 */}
+
+        {/* 월간뷰 시작 */}
+        {viewMode === "monthly" && (
+          <>
+            <div className="card">
+              <div className="date-navi">
+                <h2>{getMonthYear()}</h2>
+                <div>
+                  <button onClick={() => changeMonth(-1)} disabled={loading}>
+                    <img src="/images/dashboard/cal-left.svg" alt="" />
+                  </button>
+                  <button onClick={() => changeMonth(1)} disabled={loading}>
+                    <img src="/images/dashboard/cal-right.svg" alt="" />
+                  </button>
                 </div>
               </div>
-            </>
-          )}
-        </>
-      )}
-      {/* 일간뷰 끝 */}
+            </div>
 
-      {/* 월간뷰 시작 */}
-      {viewMode === "monthly" && (
-        <>
-          <div className="card">
-            <div className="date-navi">
-              <h2>{getMonthYear()}</h2>
-              <div>
-                <button onClick={() => changeMonth(-1)} disabled={loading}>
-                  <img src="/images/dashboard/cal-left.svg" alt="" />
-                </button>
-                <button onClick={() => changeMonth(1)} disabled={loading}>
-                  <img src="/images/dashboard/cal-right.svg" alt="" />
-                </button>
+            {/* 요약 카드 */}
+            <div className="total-box">
+              <div className="card">
+                <h5>총 수입</h5>
+                <p className="income">{formatCurrency(summary.income)}</p>
+              </div>
+              <div className="card">
+                <h5>총 지출</h5>
+                <p className="expense">{formatCurrency(summary.expense)}</p>
+              </div>
+              <div className="card">
+                <h5>잔액</h5>
+                <p className={summary.income - summary.expense >= 0 ? "income" : "expense"}>
+                  {formatCurrency(summary.income - summary.expense)}
+                </p>
               </div>
             </div>
-          </div>
-
-          {/* 요약 카드 */}
-          <div className="total-box">
-            <div className="card">
-              <h5>총 수입</h5>
-              <p className="income">{formatCurrency(summary.income)}</p>
-            </div>
-            <div className="card">
-              <h5>총 지출</h5>
-              <p className="expense">{formatCurrency(summary.expense)}</p>
-            </div>
-            <div className="card">
-              <h5>잔액</h5>
-              <p className={summary.income - summary.expense >= 0 ? "income" : "expense"}>
-                {formatCurrency(summary.income - summary.expense)}
-              </p>
-            </div>
-          </div>
-          {Object.keys(summary.byCategory).length === 0 ? (
-            <p className="no-data">지출 내역이 없습니다</p>
-          ) : (
-            <ul className="category-list">
-              {Object.entries(summary.byCategory)
-                .sort((a, b) => b[1] - a[1]) // 금액 큰 순
-                .map(([category, amount]) => (
-                  <li key={category} className={`category-item card`}>
-                    <h5>{category}</h5>
-                    <img
-                      src={categoryIconMap[category] || categoryIconMap["기타"]}
-                      alt={category}
-                      className="category-icon"
-                    />
-                    <strong className="expense">
-                      {formatCurrency(amount)}
-                    </strong>
-                  </li>
-
-                ))}
-            </ul>
-          )}
-          {/* 그래프 영역 */}
-          <div className="grid grid-2">
-            {/* 카테고리 비율 */}
-            <div className="card">
-              <h5>카테고리별 지출 비율</h5>
-
+            <div className="category-box">
+              <h5 className='sub-title'>소비분석</h5>
               {Object.keys(summary.byCategory).length === 0 ? (
                 <p className="no-data">지출 내역이 없습니다</p>
               ) : (
-                <ResponsiveContainer width="100%" height={280}>
-                  <PieChart>
-                    <Pie
-                      data={Object.entries(summary.byCategory).map(([name, value]) => ({
-                        name,
-                        value,
-                      }))}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={100}
-                      label={({ name, percent }) =>
-                        `${name} ${(percent * 100).toFixed(1)}%`
-                      }
-                    >
-                      {Object.keys(summary.byCategory).map((_, i) => (
-                        <Cell
-                          key={i}
-                          fill={[
-                            "#3b82f6",
-                            "#8b5cf6",
-                            "#ec4899",
-                            "#f97316",
-                            "#10b981",
-                            "#facc15",
-                          ][i % 6]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(v) => formatCurrency(v)} />
-                  </PieChart>
-                </ResponsiveContainer>
+                <ul className="category-list">
+                  {Object.entries(summary.byCategory)
+                    .sort((a, b) => b[1] - a[1]) // 금액 큰 순
+                    .map(([category, amount]) => (
+                      <li key={category} className={`category-item card`}>
+                        <h5>{category}</h5>
+                        <span>
+                          <img
+                            src={categoryIconMap[category] || categoryIconMap["기타"]}
+                            alt={category}
+                            className="category-icon"
+                          />
+                        </span>
+                        <strong className="expense">
+                          {formatCurrency(amount)}
+                        </strong>
+                      </li>
+
+                    ))}
+                </ul>
               )}
             </div>
-
-            {/* 수입 vs 지출 */}
-            <div className="card">
-              <h5>수입 / 지출 비교</h5>
-
-              <ResponsiveContainer width="100%" height={280}>
-                <BarChart
-                  data={[
-                    { name: "수입", amount: summary.income },
-                    { name: "지출", amount: summary.expense },
-                  ]}
-                >
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip formatter={(v) => formatCurrency(v)} />
-                  <Bar dataKey="amount" fill="#3b82f6" radius={[8, 8, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+            {/* 그래프 영역 */}
+            <div className="grid grid-2">
+              {/* 카테고리 비율 */}
+              <div className="card">
+                <h5>카테고리별 지출 비율</h5>
+                {Object.keys(summary.byCategory).length === 0 ? (
+                  <p className="no-data">지출 내역이 없습니다</p>
+                ) : (
+                  <ResponsiveContainer width="100%" height={280}>
+                    <PieChart>
+                      <Pie
+                        data={Object.entries(summary.byCategory).map(([name, value]) => ({
+                          name,
+                          value,
+                        }))}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={100}
+                        label={({ name, percent }) =>
+                          `${name} ${(percent * 100).toFixed(1)}%`
+                        }
+                      >
+                        {Object.keys(summary.byCategory).map((_, i) => (
+                          <Cell
+                            key={i}
+                            fill={[
+                              "#3b82f6",
+                              "#8b5cf6",
+                              "#ec4899",
+                              "#f97316",
+                              "#10b981",
+                              "#facc15",
+                            ][i % 6]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(v) => formatCurrency(v)} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
             </div>
-          </div>
+            <div className="graph-box">
+              {/* 수입 vs 지출 */}
+              <div className="card">
+                <h5>수입 / 지출 비교</h5>
 
-          {/* 일자별 지출 추이 */}
-          <div className="card mt-4">
-            <h5>일자별 지출 추이</h5>
+                <ResponsiveContainer width="100%" height={280}>
+                  <BarChart
+                    data={[
+                      { name: "수입", amount: summary.income },
+                      { name: "지출", amount: summary.expense },
+                    ]}
+                  >
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip formatter={(v) => formatCurrency(v)} />
+                    <Bar dataKey="amount" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              {/* 일자별 지출 추이 */}
+              <div className="card mt-4">
+                <h5>일자별 지출 추이</h5>
 
-            <ResponsiveContainer width="100%" height={260}>
-              <LineChart
-                data={Object.entries(
-                  transactions.reduce((acc, t) => {
-                    if (t.type === "EXPENSE") {
-                      const day = t.date.slice(8, 10);
-                      acc[day] = (acc[day] || 0) + t.amount;
-                    }
-                    return acc;
-                  }, {})
-                )
-                  .map(([day, amount]) => ({ day, amount }))
-                  .sort((a, b) => a.day - b.day)}
-              >
-                <XAxis dataKey="day" />
-                <YAxis />
-                <Tooltip formatter={(v) => formatCurrency(v)} />
-                <Line
-                  type="monotone"
-                  dataKey="amount"
-                  stroke="#ec4899"
-                  strokeWidth={3}
-                  dot={{ r: 4 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </>
-      )}
+                <ResponsiveContainer width="100%" height={260}>
+                  <LineChart
+                    data={Object.entries(
+                      transactions.reduce((acc, t) => {
+                        if (t.type === "EXPENSE") {
+                          const day = t.date.slice(8, 10);
+                          acc[day] = (acc[day] || 0) + t.amount;
+                        }
+                        return acc;
+                      }, {})
+                    )
+                      .map(([day, amount]) => ({ day, amount }))
+                      .sort((a, b) => a.day - b.day)}
+                  >
+                    <XAxis dataKey="day" />
+                    <YAxis />
+                    <Tooltip formatter={(v) => formatCurrency(v)} />
+                    <Line
+                      type="monotone"
+                      dataKey="amount"
+                      stroke="#ec4899"
+                      strokeWidth={3}
+                      dot={{ r: 4 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </>
+        )}
 
-      {/* 월간뷰 끝 */}
+        {/* 월간뷰 끝 */}
+      </div>
 
       {/* 팝업 */}
       <Popup open={showModal} onClose={() => setShowModal(false)}>
