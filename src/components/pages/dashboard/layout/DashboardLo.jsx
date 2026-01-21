@@ -7,7 +7,7 @@ import Chatbar from './Chatbar';
 export default function DashboardLayout() {
   const [isChatbarOpen, setIsChatbarOpen] = useState(true);
   return (
-    <div className="dashboard-layout">
+    <div className={`dashboard-layout ${isChatbarOpen ? 'chat-open' : 'chat-closed'}`}>
       <Sidebar />
       <main className="main-content">
         <Outlet />

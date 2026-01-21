@@ -174,9 +174,6 @@ export default function Sidebar() {
                 {currentMonth}월의 한도가 설정되지 않았어요.<br />
                 한도를 설정해주세요.
               </p>
-              <button className="btn-set" onClick={handleOpenBudget}>
-                한도설정
-              </button>
             </>
           )}
         </div>
@@ -207,7 +204,7 @@ export default function Sidebar() {
         </div>
 
         <div className="popup-body">
-          <div>
+          <div className='form-group'>
             <label>예산 금액</label>
             <input
               type="number"

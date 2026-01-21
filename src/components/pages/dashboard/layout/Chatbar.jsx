@@ -1,28 +1,37 @@
 import { useState } from 'react';
 import './Chatbar.css';
+import chatService from '../../../services/chat.service';
 
 export default function Chatbar({ isOpen, onToggle }) {
+
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([
     { id: 1, type: 'bot', text: '안녕하세요! 오늘 지출을 말씀해주세요' }
   ]);
 
-  const handleSend = () => {
+   const handleSend = async () => {
     if (!input.trim()) return;
 
-    // 사용자 메시지 추가
-    const newMsg = { id: Date.now(), type: 'user', text: input };
-    setMessages([...messages, newMsg]);
+    const userMsg = { id: Date.now(), type: 'user', text: input };
+    setMessages(prev => [...prev, userMsg]);
 
-    // 봇 응답 (시뮬레이션)
-    setTimeout(() => {
-      const botMsg = { 
-        id: Date.now() + 1, 
-        type: 'bot', 
-        text: '기록했어요! 식비 12,000원으로 분류했습니다.' 
+    try {
+      const res = await chatService.sendMessage(input);
+
+      const botMsg = {
+        id: Date.now() + 1,
+        type: 'bot',
+        text: res.data.reply, 
       };
+
       setMessages(prev => [...prev, botMsg]);
-    }, 500);
+    } catch (err) {
+      console.error(err);
+      setMessages(prev => [
+        ...prev,
+        { id: Date.now() + 2, type: 'bot', text: '에러가 발생' }
+      ]);
+    }
 
     setInput('');
   };

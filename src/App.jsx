@@ -32,6 +32,9 @@ import BoardWrite from './components/pages/landing/board/BoardWrite';
 import BoardModify from './components/pages/landing/board/BoardModify';
 import BoardView from './components/pages/landing/board/BoardView';
 
+
+
+
 function App() {
   return (
     <>
@@ -47,124 +50,41 @@ function App() {
         <Route path="/notice/list" element={<NoticeList />} />
 
         {/* 로그인 필요하지만 누르면 알아서 로그인 창으로 이동하게 함 */}
-        <Route path="/notice/view/:id" element={<NoticeView />} />
-        <Route
-          path="/notice/write"
-          element={
-            <PrivateRoute>
-              <NoticeWrite />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/notice/edit/:id"
-          element={
-            <PrivateRoute>
-              <NoticeEdit />
-            </PrivateRoute>
-          }
-        />
+        <Route path='/notice/view/:id' element={<NoticeView/>}/>
+        <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
+        <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
         {/* 영랑수정 */}
         <Route path="/board/list" element={<BoardList />} />
         <Route path="/board/write" element={<BoardWrite />} />
         <Route path="/board/modify/:id" element={<BoardModify />} />
-        <Route path="/board/view/:id" element={<BoardView />} />  
+        <Route path="/board/view/:id" element={<BoardView />} /> 
+
 
         {/* 로그인 필요 페이지 */}
-        <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/transaction/write"
-          element={
-            <PrivateRoute>
-              <TransactionWrite />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/transaction/list"
-          element={
-            <PrivateRoute>
-              <TransactionList />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/transaction/stats"
-          element={
-            <PrivateRoute>
-              <TransactionStats />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/notice/write"
-          element={
-            <PrivateRoute>
-              <NoticeWrite />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/notice/edit/:id"
-          element={
-            <PrivateRoute>
-              <NoticeEdit />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/auth/password"
-          element={
-            <PrivateRoute>
-              <PasswordAuth />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/member/delete"
-          element={
-            <PrivateRoute>
-              <MemberDelete />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/member/change-password"
-          element={
-            <PrivateRoute>
-              <ChangePassword />
-            </PrivateRoute>
-          }
-        />
+        <Route path='/admin' element={<PrivateRoute><Admin/></PrivateRoute>}/>
+        <Route path='/profile' element={<PrivateRoute><Profile/></PrivateRoute>}/>
+        <Route path='/transaction/write' element={<PrivateRoute><TransactionWrite/></PrivateRoute>}/>
+        <Route path='/transaction/list' element={<PrivateRoute><TransactionList/></PrivateRoute>}/>
+        <Route path='/transaction/stats' element={<PrivateRoute><TransactionStats/></PrivateRoute>}/>
+        <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
+        <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
+        <Route path='/auth/password' element={<PrivateRoute><PasswordAuth/></PrivateRoute>}/>
+        <Route path='/member/delete' element={<PrivateRoute><MemberDelete/></PrivateRoute>}/>
+        <Route path='/member/change-password' element={<PrivateRoute><ChangePassword/></PrivateRoute>}/>
 
         {/* 에러 페이지 */}
         <Route path="/404" element={<NotFound />} />
         <Route path="*" element={<NotFound />} />
         <Route path="/401" element={<UnAuthorized />} />
 
-        {/* 유빈 수정*/}
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardLayout />
-            </PrivateRoute>
-          }
-        >
-          <Route path="main" element={<Dashboard />} /> {/* /dashboard/main */}
-          <Route path="expense" element={<Expense />} /> {/* /dashboard/expense */}
-          <Route path="statistics" element={<Statistics />} /> {/* /dashboard/statistics */}
-          <Route path="setting" element={<Setting />} /> {/* /dashboard/setting */}
+          {/* 유빈 수정*/}
+        <Route path="/dashboard" element={
+                <PrivateRoute>
+                  <DashboardLayout />
+                </PrivateRoute>}>          <Route path="main" element={<Dashboard />} /> {/* /dashboard/main */}
+        <Route path="expense" element={<Expense />} /> {/* /dashboard/expense */}
+        <Route path="statistics" element={<Statistics />} /> {/* /dashboard/statistics */}
+        <Route path="setting" element={<Setting />} /> {/* /dashboard/setting */}
         </Route>
       </Routes>
     </>

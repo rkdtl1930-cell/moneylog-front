@@ -31,6 +31,11 @@ class TransactionService{
     if(month) params.month = month
     return axios.get(`${BASE_URL}/member/${mid}/month`,{headers:authHeader(),params})
   }
+  getListByDay(mid, date, page=1, size){  
+    const params = {page, size, date}
+    if(date) params.date = date  
+    return axios.get(`${BASE_URL}/member/${mid}/day`,{headers:authHeader(),params})
+  }
 }
 const transactionService = new TransactionService()
 export default transactionService
