@@ -1,12 +1,15 @@
 /* 대시보드 > 콘텐츠 페이지 css*/
 
 /* 공통 */
+.dash-board-con{display: flex; flex-direction: column; gap: 16px;}
 .card{padding: 20px; background: #fff; border-radius: 6px;}
 .card h5{font-size: 15px; margin-bottom: 12px; font-family: 'Isamanru'; color:#3B4662; font-weight: 300;}
-.sub-title{font-size: 17px; margin-bottom: 14px;}
+.sub-title{font-size: 17px;}
+.btn-primary{border: 1px solid var(--main-color); background: var(--main-color); color: #fff;}
+.btn-reset{border: 1px solid #e4e4e4; background: #e4e4e4; color: #525252;}
 
 .search-bar{padding: 20px; padding: 6px 12px; background: #fff; display: flex; align-items: center; gap: 10px;
-border-radius: 6px; margin-bottom: 20px;}
+border-radius: 6px;}
 .search-bar > div{flex: 1;}
 .search-bar label{color: #666; font-size: 12px; margin-right: 4px;}
 .search-bar input[type="date"]{padding: 12px; width: calc(100% - 40px); border: 1px solid #ddd; font-size: 12px;
@@ -40,30 +43,30 @@ border-radius: 6px; margin-bottom: 20px;}
 .page-link:focus{box-shadow:none}
 
 /* 대시보드 */
-.period-wrap{display: flex; gap: 4px; margin-bottom: 12px; justify-content: space-between;}
+.period-wrap{display: flex; gap: 4px; justify-content: space-between;}
 .period-wrap > div{display: flex; gap: 6px; }
-.period-wrap button{padding: 8px; font-size: 14px;  border: 1px solid var(--blue-color); background: #fff; color: var(--blue-color);
+.period-wrap button{padding: 8px; font-size: 14px;  border: 1px solid var(--main-color); background: #fff; color: var(--main-color);
 border-radius: 4px; cursor: pointer;}
-.period-wrap button.on{background-color: var(--blue-color); color: #fff; border: 1px solid var(--blue-color);}
+.period-wrap button.on{background-color: var(--main-color); color: #fff; border: 1px solid var(--main-color);}
 .week{display: flex; align-items: start; margin-top: 20px;}
 .week button{flex: 1; background-color: #fff; border: none; cursor: pointer;}
 .week button .day{font-size: 14px; color: #3B4662; margin-bottom: 4px;}
 .week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; }
 .week button.selected .number{background: #B59CE9; }
 .week button span{display: block; font-size: 12px; font-family: 'Open Sans'; margin-top: 1px;}
-.week button span.income{color: var(--blue-color);}
+.week button span.income{color: var(--main-color);}
 .week button span.expense{color: #E2523F;}
 
-.total-box{display: flex; gap: 30px; margin:20px 0;}
+.total-box{display: flex; gap: 30px; }
 .total-box > div{width: calc((100% - 30px) / 2); background: #fff;}
 .total-box > div > span{font-size: 14px; color: #3B4662; font-family: 'Isamanru'; font-weight: 500;}
-.total-box > div > p{font-size: 17px; text-align: right;}
+.total-box > div > p{font-size: 24px; text-align: right;}
 
 .date-navi{display: flex; align-items:center; justify-content: space-between;}
 .date-navi h2{font-size: 22px; font-family: 'Isamanru'; font-weight: 300;}
 .date-navi button{background: transparent; border: none; outline: none; cursor: pointer;}
 
-.category-list{display: flex; gap: 30px;}
+.category-list{display: flex; gap: 20px;}
 .category-list .category-item{flex: 1; position: relative;}
 .category-list .category-item strong{font-size: 22px;}
 .category-list .category-item span{display: flex; width: 60px; height: 60px; background: #e3f9ff; border-radius: 50%;
@@ -72,3 +75,8 @@ align-items: center; justify-content: center; position: absolute; top: 10px; rig
 
 .graph-box{display: flex; gap: 30px;}
 .graph-box > div{flex: 1;}
+
+.category-legend{display: flex; gap: 12px; margin-bottom: 12px; justify-content: end;}
+.category-legend .legend-color{width: 12px; height: 12px; display: inline-block; vertical-align: middle; border-radius: 4px;}
+.category-legend .legend-item{display: flex; gap: 4px;}
+.category-legend .legend-text{font-size: 12px;}

@@ -5,18 +5,18 @@ import { TransactionType } from '../../../models/TransactionType';
 import './Content.css'
 import Popup from '../popup/Popup';
 import {
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
   BarChart,
   Bar,
   XAxis,
   YAxis,
+  Tooltip,
+  ResponsiveContainer,
   LineChart,
   Line,
+  LabelList,
+  Cell
 } from "recharts";
+import useBudgetStore from '../../../store/monthlyExpense ';
 
 
 const Dashboard = () => {
@@ -34,18 +34,25 @@ const Dashboard = () => {
   const [type, setType] = useState(TransactionType.INCOME);
   const [category, setCategory] = useState('');
 
-  const categories = ["외식", "배달", "교통", "쇼핑", "월급", "기타"];
+  const incomeCategories = ["월급", "용돈", "부수입", "기타"];
+  const expenseCategories = ["외식", "배달", "교통", "쇼핑", "생활", "기타"];
+  const categoryColors = ["#4C7BED", "#5755BA", "#FB5D76", "#0296FC", "#9E76D9", "#94A5D1"]
   const currentUser = useUserStore((state) => state.user);
   const mid = currentUser?.id;
 
   const categoryIconMap = {
     외식: "/images/dashboard/category/food.png",
     배달: "/images/dashboard/category/delivery.png",
-    교통: "/images/dashboard/category/transport.png",
+    교통: "/images/dashboard/category/vehicles.png",
     쇼핑: "/images/dashboard/category/shopping.png",
     월급: "/images/dashboard/category/money.png",
     기타: "/images/dashboard/category/ellipsis.png",
   };
+
+  const setMonthlyExpense = useBudgetStore(state => state.setMonthlyExpense);
+  useEffect(() => {
+  setMonthlyExpense(summary.expense);
+}, [summary.expense]);
 
 
   useEffect(() => {
@@ -88,7 +95,7 @@ const Dashboard = () => {
         const income = transactionList.filter(t => t.type === 'INCOME').reduce((sum, t) => sum + t.amount, 0);
         const expense = transactionList.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + t.amount, 0);
         return { date: dateStr, income, expense };
-      } catch (err) {
+      } catch {
         return { date: formatDate(date), income: 0, expense: 0 };
       }
     });
@@ -117,7 +124,7 @@ const Dashboard = () => {
       }, {});
       setTransactions(transactionList);
       setSummary({ income, expense, byCategory });
-    } catch (err) {
+    } catch {
       setError('데이터를 불러오는데 실패했습니다.');
       setTransactions([]);
       setSummary({ income: 0, expense: 0, byCategory: {} });
@@ -144,7 +151,7 @@ const Dashboard = () => {
       }, {});
       setTransactions(transactionList);
       setSummary({ income, expense, byCategory });
-    } catch (err) {
+    } catch {
       setError('데이터를 불러오는데 실패했습니다.');
       setTransactions([]);
       setSummary({ income: 0, expense: 0, byCategory: {} });
@@ -173,7 +180,7 @@ const Dashboard = () => {
       } else {
         loadMonthlyData(selectedDate);
       }
-    } catch (err) {
+    } catch {
       alert("등록에 실패했습니다.");
     }
   };
@@ -225,18 +232,6 @@ const Dashboard = () => {
 
   const getMonthYear = () => {
     return `${selectedDate.getFullYear()}년 ${selectedDate.getMonth() + 1}월`;
-  };
-
-  const getCategoryPercentage = (amount) => {
-    return summary.expense > 0 ? (amount / summary.expense * 100).toFixed(1) : 0;
-  };
-
-  const formatTime = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${hours}:${minutes}`;
   };
 
   const isSameDay = (date1, date2) => {
@@ -394,82 +389,109 @@ const Dashboard = () => {
                 </p>
               </div>
             </div>
+            <h5 className='sub-title'>소비분석</h5>
             <div className="category-box">
-              <h5 className='sub-title'>소비분석</h5>
               {Object.keys(summary.byCategory).length === 0 ? (
                 <p className="no-data">지출 내역이 없습니다</p>
               ) : (
-                <ul className="category-list">
-                  {Object.entries(summary.byCategory)
-                    .sort((a, b) => b[1] - a[1]) // 금액 큰 순
-                    .map(([category, amount]) => (
-                      <li key={category} className={`category-item card`}>
-                        <h5>{category}</h5>
-                        <span>
-                          <img
-                            src={categoryIconMap[category] || categoryIconMap["기타"]}
-                            alt={category}
-                            className="category-icon"
-                          />
-                        </span>
-                        <strong className="expense">
-                          {formatCurrency(amount)}
-                        </strong>
-                      </li>
-
-                    ))}
-                </ul>
+                <>
+                  <ResponsiveContainer width="100%" height={20}>
+                    <BarChart
+                      data={[
+                        Object.entries(summary.byCategory)
+                          .sort((a, b) => b[1] - a[1])
+                          .reduce((acc, [name, value]) => {
+                            acc[name] = value;
+                            return acc;
+                          }, {})
+                      ]}
+                      layout="vertical"
+                    >
+                      <XAxis type="number" hide />
+                      <YAxis type="category" hide />
+                      {Object.entries(summary.byCategory)
+                        .sort((a, b) => b[1] - a[1])
+                        .map(([category], i) => (
+                          <Bar
+                            key={category}
+                            dataKey={category}
+                            stackId="a"
+                            fill={categoryColors[i % 6]}
+                            radius={i === 0 ? [0, 0, 0, 0] : i === Object.keys(summary.byCategory).length - 1 ? [0, 0, 0, 0] : [0, 0, 0, 0]}
+                          >
+                            <LabelList
+                              dataKey={category}
+                              position="center"
+                              content={({ value, x, y, width }) => {
+                                if (!value) return null;
+                                const percentage = ((value / summary.expense) * 100).toFixed(1);
+                                if (width < 50) return null;
+                                return (
+                                  <text
+                                    x={x + width / 2}
+                                    y={y + 30}
+                                    fill="white"
+                                    textAnchor="middle"
+                                    fontSize="14"
+                                    fontWeight="bold"
+                                  >
+                                    {category} {percentage}%
+                                  </text>
+                                );
+                              }}
+                            />
+                          </Bar>
+                        ))}
+                    </BarChart>
+                  </ResponsiveContainer>
+                  <div className="category-legend">
+                    {Object.entries(summary.byCategory)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([category, amount], i) => {
+                        const percentage = ((amount / summary.expense) * 100).toFixed(1);
+                        const color = categoryColors[i % 6];
+                        return (
+                          <div key={category} className="legend-item">
+                            <span
+                              className="legend-color"
+                              style={{ backgroundColor: color }}
+                            />
+                            <span className="legend-text">
+                              {category} {percentage}%
+                            </span>
+                          </div>
+                        );
+                      })}
+                  </div>
+                  <ul className="category-list">
+                    {Object.entries(summary.byCategory)
+                      .slice(0, 3)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([category, amount]) => (
+                        <li key={category} className="category-item card">
+                          <h5>{category}</h5>
+                          <span>
+                            <img
+                              src={categoryIconMap[category] || categoryIconMap["기타"]}
+                              alt={category}
+                              className="category-icon"
+                            />
+                          </span>
+                          <strong className="expense">
+                            {formatCurrency(amount)}
+                          </strong>
+                        </li>
+                      ))}
+                  </ul>
+                </>
               )}
             </div>
             {/* 그래프 영역 */}
-            <div className="grid grid-2">
-              {/* 카테고리 비율 */}
-              <div className="card">
-                <h5>카테고리별 지출 비율</h5>
-                {Object.keys(summary.byCategory).length === 0 ? (
-                  <p className="no-data">지출 내역이 없습니다</p>
-                ) : (
-                  <ResponsiveContainer width="100%" height={280}>
-                    <PieChart>
-                      <Pie
-                        data={Object.entries(summary.byCategory).map(([name, value]) => ({
-                          name,
-                          value,
-                        }))}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={100}
-                        label={({ name, percent }) =>
-                          `${name} ${(percent * 100).toFixed(1)}%`
-                        }
-                      >
-                        {Object.keys(summary.byCategory).map((_, i) => (
-                          <Cell
-                            key={i}
-                            fill={[
-                              "#3b82f6",
-                              "#8b5cf6",
-                              "#ec4899",
-                              "#f97316",
-                              "#10b981",
-                              "#facc15",
-                            ][i % 6]}
-                          />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(v) => formatCurrency(v)} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                )}
-              </div>
-            </div>
+            <h5 className='sub-title'>통계</h5>
             <div className="graph-box">
               {/* 수입 vs 지출 */}
               <div className="card">
                 <h5>수입 / 지출 비교</h5>
-
                 <ResponsiveContainer width="100%" height={280}>
                   <BarChart
                     data={[
@@ -477,10 +499,15 @@ const Dashboard = () => {
                       { name: "지출", amount: summary.expense },
                     ]}
                   >
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <XAxis
+                      dataKey="name"
+                      tick={{ fontSize: 18, fontWeight: '600', fill: '#374151' }}  // 색상도 변경 가능
+                    />
                     <Tooltip formatter={(v) => formatCurrency(v)} />
-                    <Bar dataKey="amount" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                    <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
+                      <Cell fill="#6585F6" />  {/* 수입 - 초록색 */}
+                      <Cell fill="#F765A3" />  {/* 지출 - 빨간색 */}
+                    </Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -508,8 +535,8 @@ const Dashboard = () => {
                     <Line
                       type="monotone"
                       dataKey="amount"
-                      stroke="#ec4899"
-                      strokeWidth={3}
+                      stroke="#6585F6"
+                      strokeWidth={2}
                       dot={{ r: 4 }}
                     />
                   </LineChart>
@@ -518,7 +545,6 @@ const Dashboard = () => {
             </div>
           </>
         )}
-
         {/* 월간뷰 끝 */}
       </div>
 
@@ -554,7 +580,7 @@ const Dashboard = () => {
                 required
               >
                 <option value="">카테고리 선택</option>
-                {categories.map((c) => (
+                {(type === TransactionType.INCOME ? incomeCategories : expenseCategories).map((c) => (
                   <option key={c} value={c}>{c}</option>
                 ))}
               </select>
@@ -595,7 +621,6 @@ const Dashboard = () => {
           </form>
         </div>
       </Popup>
-
     </>
   );
 };

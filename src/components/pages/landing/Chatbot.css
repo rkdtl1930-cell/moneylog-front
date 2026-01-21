@@ -60,13 +60,13 @@
 .chatbot-window .chat-input button:active {transform: translateY(0);}
 
 
-/* 타이핑 인디케이터 */
-.chatbot-window .typing-indicator {background: white;padding: 12px 16px;border-radius: 18px;border-bottom-left-radius: 4px;
+/* 타이핑 인디케이터 - 대시보드랑 공통*/
+.typing-indicator {background: white;padding: 12px 16px;border-radius: 18px;border-bottom-left-radius: 4px;
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);display: flex;align-items: center;gap: 12px;}
-.chatbot-window .cat-thinking {position: relative;width: 40px;height: 40px;}
-.chatbot-window .cat-thinking img{position: absolute;top: 0;left: 0;width: 100%;height: 100%;object-fit: contain;}
-.chatbot-window .cat-thinking .open {animation: showOpen 1s ease-in-out infinite;}
-.chatbot-window .cat-thinking .closed {animation: showClosed 1s ease-in-out infinite;}
+.cat-thinking {position: relative;width: 40px;height: 40px;}
+.cat-thinking img{position: absolute;top: 0;left: 0;width: 100%;height: 100%;object-fit: contain;}
+.cat-thinking .open {animation: showOpen 1s ease-in-out infinite;}
+.cat-thinking .closed {animation: showClosed 1s ease-in-out infinite;}
 
 @keyframes showOpen {
   0%, 49% {opacity: 1;}
@@ -78,11 +78,12 @@ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);display: flex;align-items: center;gap:
   50%, 100% {opacity: 1;}
 }
 
-.chatbot-window .dots {display: flex;gap: 4px;align-items: center;}
-.chatbot-window .dots span {width: 6px;height: 6px;background: #999;border-radius: 50%;animation: dotBounce 1.4s ease-in-out infinite;}
-.chatbot-window .dots span:nth-child(1) {animation-delay: 0s;}
-.chatbot-window .dots span:nth-child(2) {animation-delay: 0.2s;}
-.chatbot-window .dots span:nth-child(3) {animation-delay: 0.4s;}
+/* 타이핑 인디케이터 - 대시보드랑 공통*/
+.dots {display: flex;gap: 4px;align-items: center;}
+.dots span {width: 6px;height: 6px;background: #999;border-radius: 50%;animation: dotBounce 1.4s ease-in-out infinite;}
+.dots span:nth-child(1) {animation-delay: 0s;}
+.dots span:nth-child(2) {animation-delay: 0.2s;}
+.dots span:nth-child(3) {animation-delay: 0.4s;}
 @keyframes dotBounce {
   0%, 60%, 100% {transform: translateY(0);opacity: 0.7;}
   30% {transform: translateY(-8px);opacity: 1;}

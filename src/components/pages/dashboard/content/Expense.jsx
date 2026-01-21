@@ -85,7 +85,7 @@ export default function Expense() {
     <h1>
       History
     </h1>
-    <div className="container p-4">
+    <div className="dash-board-con">
       <div className="search-bar">
         <div className="col-md-3">
           <label className="form-label">시작일</label>

@@ -5,13 +5,14 @@ import logo from "../../../../assets/cashtalk.svg";
 import useUserStore from "../../../store/useUserStore";
 import budgetService from "../../../services/budget.service";
 import Popup from '../popup/Popup';
+import useBudgetStore from '../../../store/monthlyExpense ';
 
 export default function Sidebar() {
   //메뉴
   const menuItems = [
     { path: '/dashboard/main', iconOff: '/images/dashboard/icons/home-off.svg', iconOn: '/images/dashboard/icons/home-on.svg', label: '대시보드', end: true },
     { path: '/dashboard/expense', iconOff: '/images/dashboard/icons/expense-off.svg', iconOn: '/images/dashboard/icons/expense-on.svg', label: '지출 내역' },
-    { path: '/dashboard/statistics', iconOff: '/images/dashboard/icons/statistics-off.svg', iconOn: '/images/dashboard/icons/statistics-on.svg', label: '통계' },
+    // { path: '/dashboard/statistics', iconOff: '/images/dashboard/icons/statistics-off.svg', iconOn: '/images/dashboard/icons/statistics-on.svg', label: '통계' },
     { path: '/dashboard/setting', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '설정' },
   ];
 
@@ -29,6 +30,8 @@ export default function Sidebar() {
   const currentMonth = today.getMonth() + 1;
 
 
+  // 이번달 사용금액
+  const monthlyExpense = useBudgetStore(state => state.monthlyExpense);
 
   // 예산 가져오기
   const fetchBudget = async () => {
@@ -105,9 +108,10 @@ export default function Sidebar() {
 
   // 남은 금액 및 사용률 계산
   const usedRate = currentBudget
-    ? ((currentBudget.usedAmount / currentBudget.limitAmount) * 100).toFixed(1)
-    : 0;
+  ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1)
+  : 0;
 
+  
   return (
     <aside className="sidebar">
       <div className="con">
@@ -137,7 +141,7 @@ export default function Sidebar() {
       {/* 예산 현황 */}
       <div className="balance-wrap">
         <div className="balance-header">
-          <p className="month">{currentMonth}월 한도</p>
+          <p className="month">{currentMonth}월 지출금액</p>
           {currentBudget ? (
             <button className="btn-modify" onClick={handleOpenBudget}>
               한도수정
@@ -154,18 +158,8 @@ export default function Sidebar() {
             // 한도 설정 있을 시
             <>
               <div className="amount">
-                <span className="value">{currentBudget.usedAmount.toLocaleString()}</span>원
+                <span className="value">{monthlyExpense.toLocaleString()}</span>원
               </div>
-              {/* <div className="amount-row">
-                <span className="label">이번달 쓴 금액</span>
-                <span className="value">{currentBudget.usedAmount.toLocaleString()}원</span>
-              </div>
-              <div className="amount-row">
-                <span className="label">남은 금액</span>
-                <span className={`value ${remainAmount < 0 ? 'minus' : ''}`}>
-                  {remainAmount.toLocaleString()}원
-                </span>
-              </div> */}
             </>
           ) : (
             // 한도 설정 없을시
@@ -184,13 +178,13 @@ export default function Sidebar() {
               <div
                 className="progress-fill"
                 style={{
-                  width: `${Math.min(usedRate, 100)}%`,
-                  backgroundColor: usedRate > 100 ? "#ff4444" : "#FFD700"
+                  width: `${Math.min(usedRate, 100)}%`,height:'100%',
+                  backgroundColor: usedRate > 50 ? "#f75b50" : "#157AFF"
                 }}
               />
             </div>
             <div className="progress-text">
-              {currentBudget.usedAmount.toLocaleString()} /{" "}
+              {monthlyExpense.toLocaleString()} /{" "}
               {currentBudget.limitAmount.toLocaleString()}
             </div>
           </div>
