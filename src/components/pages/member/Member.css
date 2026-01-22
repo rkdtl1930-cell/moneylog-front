@@ -6,7 +6,7 @@
 .member .input-group label{font-size: 12px; width: 70px;}
 .member .input-group input{flex: 1;}
 .member .input-group .invalid-feedback{width: 100%; padding-left: 70px; margin-top: 4px; font-size: 12px;}
-.member .input-group .btn-primary{height: 40px; margin-left: 12px;}
+.member .input-group .btn-primary{height: 40px; margin-left: 12px; padding: 8px 12px;}
 .member .type-box label{font-size: 12px; }
 .member .card-check-group{margin-top: 12px;}
 .member .loginBtn{padding: 12px; margin-top: 12px;}

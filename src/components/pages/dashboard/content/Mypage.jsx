@@ -4,15 +4,18 @@ import useUserStore from "../../../store/useUserStore";
 
 export default function MyPage() {
   const currentUser = useUserStore((state) => state.user);
+  const setCurrentUser = useUserStore((state) => state.setCurrentUser);
 
   // 사용자 정보
   const [userInfo, setUserInfo] = useState({
     id: "",
     username: "",
     name: "",
-    nickname: "",
-    interesting: "record"
+    nickname: ""
   });
+
+  // 원본 닉네임 (변경 여부 확인용)
+  const [originalNickname, setOriginalNickname] = useState("");
 
   // 비밀번호
   const [newPassword, setNewPassword] = useState("");
@@ -23,32 +26,52 @@ export default function MyPage() {
 
   // 컴포넌트 마운트 시 회원 정보 불러오기
   useEffect(() => {
-    if (currentUser?.username) {
+    if (currentUser?.id) {
       loadMemberInfo();
     }
   }, [currentUser]);
 
   const loadMemberInfo = async () => {
     try {
+      console.log("현재 사용자:", currentUser);
+      
+      // 스토어에 이미 사용자 정보가 있으면 그걸 사용
+      if (currentUser) {
+        setUserInfo({
+          id: currentUser.id || "",
+          username: currentUser.username || "",
+          name: currentUser.name || "",
+          nickname: currentUser.nickname || ""
+        });
+        setOriginalNickname(currentUser.nickname || "");
+        return;
+      }
+      
+      // API 호출이 필요한 경우
       const response = await memberService.getMember(currentUser.username);
-      console.log("Member info:", response.data);
+      console.log("API 응답:", response.data);
+      
+      const data = response.data.dtoList && response.data.dtoList.length > 0 
+        ? response.data.dtoList[0] 
+        : response.data;
       
       setUserInfo({
-        id: response.data.id || "",
-        username: response.data.username || "",
-        name: response.data.name || "",
-        nickname: response.data.nickname || "",
-        interesting: response.data.interesting || "record"
+        id: data.id || "",
+        username: data.username || "",
+        name: data.name || "",
+        nickname: data.nickname || ""
       });
+      setOriginalNickname(data.nickname || "");
     } catch (err) {
       console.error("회원 정보 불러오기 실패:", err);
       setError("회원 정보를 불러오는데 실패했습니다.");
     }
   };
-  const handleUserTypeChange = (type) => {
+
+  const handleNicknameChange = (e) => {
     setUserInfo(prev => ({
       ...prev,
-      interesting: type
+      nickname: e.target.value
     }));
   };
 
@@ -89,14 +112,20 @@ export default function MyPage() {
 
     try {
       const updatePromises = [];
-      // 비밀번호가 입력된 경우 비밀번호 변경
-      if (newPassword) {
-        updatePromises.push(memberService.changPassword(newPassword));
-      }
+      
+      // 비밀번호 또는 닉네임 변경 (change-info API)
+      const isPasswordChanged = newPassword && newPassword.trim() !== "";
+      const isNicknameChanged = userInfo.nickname !== originalNickname;
 
-      // 사용자 유형이 변경된 경우
-      if (userInfo.interesting !== currentUser.interesting) {
-        updatePromises.push(memberService.changeInteresting(userInfo.interesting));
+      if (isPasswordChanged || isNicknameChanged) {
+        const changeInfoData = {};
+        if (isPasswordChanged) {
+          changeInfoData.password = newPassword;
+        }
+        if (isNicknameChanged) {
+          changeInfoData.nickname = userInfo.nickname;
+        }
+        updatePromises.push(memberService.changeInfo(changeInfoData));
       }
 
       // 모든 API 호출이 없으면 알림
@@ -116,12 +145,22 @@ export default function MyPage() {
       setConfirmPw("");
       setMatch("");
 
+      // 스토어의 사용자 정보 업데이트
+      setCurrentUser({
+        ...currentUser,
+        nickname: userInfo.nickname
+      });
+
       // 사용자 정보 다시 불러오기
       await loadMemberInfo();
       
     } catch (err) {
       console.error(err);
-      setError("회원정보 수정 중 오류가 발생했습니다.");
+      if (err.response?.data) {
+        setError(err.response.data);
+      } else {
+        setError("회원정보 수정 중 오류가 발생했습니다.");
+      }
     } finally {
       setLoading(false);
     }
@@ -156,7 +195,7 @@ export default function MyPage() {
           />
         </div>
 
-        {/* 닉네임 (읽기 전용) */}
+        {/* 닉네임 (수정 가능) */}
         <div className="mb-3">
           <label className="form-label">닉네임</label>
           <input
@@ -164,14 +203,14 @@ export default function MyPage() {
             name="nickname"
             className="form-control"
             value={userInfo.nickname}
-            readOnly
+            onChange={handleNicknameChange}
           />
         </div>
 
         {/* 새 비밀번호 */}
         <div className="mb-3">
           <label htmlFor="newPassword" className="form-label">
-            새 비밀번호
+            새 비밀번호 (변경 시에만 입력)
           </label>
           <input
             type="password"
@@ -180,25 +219,26 @@ export default function MyPage() {
             value={newPassword}
             onChange={handleNewPasswordChange}
             autoComplete="new-password"
-            placeholder="새 비밀번호를 입력하세요"
+            placeholder="변경하지 않으려면 비워두세요"
           />
         </div>
 
         {/* 새 비밀번호 확인 */}
-        <div className="mb-3">
-          <label htmlFor="confirmPW" className="form-label">
-            새 비밀번호 확인
-          </label>
-          <input
-            type="password"
-            id="confirmPW"
-            className="form-control"
-            value={confirmPW}
-            onChange={handleConfirmPasswordChange}
-            autoComplete="new-password"
-            placeholder="비밀번호를 다시 입력하세요"
-          />
-        </div>
+        {newPassword && (
+          <div className="mb-3">
+            <label htmlFor="confirmPW" className="form-label">
+              새 비밀번호 확인
+            </label>
+            <input
+              type="password"
+              id="confirmPW"
+              className="form-control"
+              value={confirmPW}
+              onChange={handleConfirmPasswordChange}
+              autoComplete="new-password"
+            />
+          </div>
+        )}
 
         {/* 비밀번호 일치 메시지 */}
         {match && (
@@ -212,43 +252,6 @@ export default function MyPage() {
             {match}
           </p>
         )}
-
-        {/* 사용자 유형 (수정 가능) */}
-        <div className="mb-3">
-          <label className="form-label">사용자 유형</label>
-
-          <div className="card-check-group">
-            <input
-              type="radio"
-              name="userType"
-              id="record"
-              checked={userInfo.interesting === "record"}
-              onChange={() => handleUserTypeChange("record")}
-            />
-            <label htmlFor="record" className="card-check">
-              <h4>기록형</h4>
-              <p>
-                매일의 수입과 지출을 빠르게 기록하고
-                소비 흐름을 한눈에 확인하고 싶은 분
-              </p>
-            </label>
-
-            <input
-              type="radio"
-              name="userType"
-              id="goal"
-              checked={userInfo.interesting === "goal"}
-              onChange={() => handleUserTypeChange("goal")}
-            />
-            <label htmlFor="goal" className="card-check">
-              <h4>목표형</h4>
-              <p>
-                한 달 목표 금액을 정하고
-                지금 얼마나 가까워졌는지 확인하고 싶은 분
-              </p>
-            </label>
-          </div>
-        </div>
 
         <button 
           type="submit" 

@@ -555,7 +555,7 @@ const Dashboard = () => {
             {type === TransactionType.INCOME ? "수입 등록" : "지출 등록"}
           </h3>
           <button className="close-btn" onClick={() => setShowModal(false)}>
-            ×
+            <img src="/images/dashboard/ico-close.svg" alt="" />
           </button>
         </div>
 

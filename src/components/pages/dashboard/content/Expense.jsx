@@ -183,7 +183,7 @@ export default function Expense() {
             <div className="popup-header">
               <h3>거래내역 수정</h3>
               <button className="close-btn" onClick={() => setEditModalOpen(false)}>
-                ×
+                <img src="/images/dashboard/ico-close.svg" alt="" />
               </button>
             </div>
 

@@ -11,7 +11,7 @@ export default function Register() {
     password: '',
     name: '',
     nickname: '',
-    interesting: 'record' // 기본값: 기록형
+    // interesting: 'record' // 기본값: 기록형
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -78,7 +78,6 @@ export default function Register() {
       password: member.password,
       name: member.name,
       nickname: member.nickname,
-      interesting: member.interesting // "record" 또는 "goal"
     };
 
     registerService(registerData)
@@ -125,13 +124,6 @@ export default function Register() {
         passwordConfirm: false
       }));
     }
-  };
-
-  const handleUserTypeChange = (type) => {
-    setMember((prevState) => ({
-      ...prevState,
-      interesting: type
-    }));
   };
 
   const checkUsernameAvailability = () => {
@@ -261,7 +253,7 @@ export default function Register() {
             </div>
 
             {/* 사용자 유형 선택 (기록형/목표형) */}
-            <div className="type-box">
+            {/* <div className="type-box">
               <label className="form-label fw-bold">사용자 유형 선택</label>
               <div className="card-check-group">
                 <input
@@ -294,7 +286,7 @@ export default function Register() {
                   </p>
                 </label>
               </div>
-            </div>
+            </div> */}
 
             {/* 회원가입 버튼 */}
             <button

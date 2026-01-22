@@ -36,6 +36,8 @@ border-radius: 6px;}
 .common-table .del-btn{color: #E2523F; border: 1px solid #E2523F; margin-left: 2px;}
 .common-table .income > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
 .common-table .expense > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
+.common-table .admin > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
+.common-table .user > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
 
 .pagination{gap:6px; text-align: center; margin-top: 20px;}
 .page-item{}
@@ -53,7 +55,7 @@ border-radius: 4px; cursor: pointer;}
 .week{display: flex; align-items: start; margin-top: 20px;}
 .week button{flex: 1; background-color: #fff; border: none; cursor: pointer;}
 .week button .day{font-size: 14px; color: #3B4662; margin-bottom: 4px;}
-.week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; }
+.week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; width: 30px; height: 30px;}
 .week button.selected .number{background: #B59CE9; }
 .week button span{display: block; font-size: 12px; font-family: 'Open Sans'; margin-top: 1px;}
 .week button span.income{color: var(--main-color);}

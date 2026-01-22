@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useUserStore from "../../store/useUserStore";
 import { Link, useNavigate } from "react-router-dom";
 import { loginService } from "../../services/auth.service";
@@ -14,7 +14,6 @@ export default function Login() {
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const currentUser = useUserStore((state) => state.user);
   const setCurrentUser = useUserStore((state) => state.setCurrentUser);
   const navigate = useNavigate();
 
@@ -24,11 +23,11 @@ export default function Login() {
     password: false
   });
 
-  useEffect(() => {
-    if (currentUser?.id) {
-      navigate('/dashboard/main');
-    }
-  }, [currentUser, navigate]);
+  // useEffect(() => {
+  //   if (currentUser?.id) {
+  //     navigate('/dashboard/main');
+  //   }
+  // }, [currentUser, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,19 +66,26 @@ export default function Login() {
     setErrorMessage('');
 
     loginService(member)
-      .then((response) => {
-        console.log("Login response.data:", response.data);
-        setCurrentUser(response.data);
-        console.log("After setCurrentUser, store user:", useUserStore.getState().user);
-        navigate('/home');
-      })
-      .catch((error) => {
-        console.log(error);
-        setErrorMessage("아이디 또는 패스워드가 일치하지 않습니다.");
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+  .then((response) => {
+    const user = response.data;
+
+    setCurrentUser(user);
+
+    // 관리자면 회원관리로
+    if (user.role === 'ADMIN') {
+      navigate('/dashboard/admin');
+    } else {
+      navigate('/dashboard/main');
+    }
+  })
+  .catch((error) => {
+    console.log(error);
+    setErrorMessage("아이디 또는 패스워드가 일치하지 않습니다.");
+  })
+  .finally(() => {
+    setLoading(false);
+  });
+
   };
 
   return (
