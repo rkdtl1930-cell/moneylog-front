@@ -88,13 +88,14 @@ align-items: center; justify-content: center; position: absolute; top: 10px; rig
 .setting img{width: 50px;}
 .setting > form{display: flex; align-items: center; flex-direction: column; gap: 8px;}
 .setting input[type="password"]{width: 100%; font-size: 14px;}
-.setting p{font-size: 17px; text-align: left;}
+.setting h3{font-size: 17px; text-align: left;}
+.setting p{font-size: 13px;}
  
 /* 마이 페이지 */
 .mypage{max-width: 600px; margin: 0 auto;}
 .mypage > h3{font-size: 20px;}
 .mypage form{display: flex; gap: 10px; flex-direction: column;}
-.mypage form label{display: block; font-size: 12px; margin-bottom: 4px;}
+.mypage form label{display: block; font-size: 13px; margin-bottom: 4px; color: #3B4662;}
 .mypage form input{width: 100%; font-size: 14px;}
 .mypage form input:read-only{background: #f1f1f1; }
 

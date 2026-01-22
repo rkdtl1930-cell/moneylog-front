@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import memberService from "../../../services/member.service";
 import useUserStore from "../../../store/useUserStore";
 
@@ -46,15 +45,6 @@ export default function MyPage() {
       setError("회원 정보를 불러오는데 실패했습니다.");
     }
   };
-
-  const handleUserInfoChange = (e) => {
-    const { name, value } = e.target;
-    setUserInfo(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
   const handleUserTypeChange = (type) => {
     setUserInfo(prev => ({
       ...prev,
@@ -87,40 +77,51 @@ export default function MyPage() {
     e.preventDefault();
     setError("");
 
-    // 비밀번호를 입력한 경우에만 일치 여부 확인
+    // 비밀번호를 입력한 경우 일치 여부 확인
     if (newPassword || confirmPW) {
       if (newPassword !== confirmPW) {
         setError("비밀번호가 일치하지 않습니다.");
         return;
       }
-
-      if (!newPassword) {
-        setError("새 비밀번호를 입력해주세요.");
-        return;
-      }
-    }
-
-    // 비밀번호 변경만 가능 (현재 API 기준)
-    if (!newPassword) {
-      setError("변경할 비밀번호를 입력해주세요.");
-      return;
     }
 
     setLoading(true);
 
     try {
-      await memberService.changPassword(newPassword);
+      const updatePromises = [];
+      // 비밀번호가 입력된 경우 비밀번호 변경
+      if (newPassword) {
+        updatePromises.push(memberService.changPassword(newPassword));
+      }
+
+      // 사용자 유형이 변경된 경우
+      if (userInfo.interesting !== currentUser.interesting) {
+        updatePromises.push(memberService.changeInteresting(userInfo.interesting));
+      }
+
+      // 모든 API 호출이 없으면 알림
+      if (updatePromises.length === 0) {
+        setError("변경된 내용이 없습니다.");
+        setLoading(false);
+        return;
+      }
+
+      // 모든 변경사항 한 번에 처리
+      await Promise.all(updatePromises);
       
-      alert("비밀번호가 변경되었습니다.");
+      alert("회원정보가 수정되었습니다.");
       
       // 비밀번호 필드 초기화
       setNewPassword("");
       setConfirmPw("");
       setMatch("");
+
+      // 사용자 정보 다시 불러오기
+      await loadMemberInfo();
       
     } catch (err) {
       console.error(err);
-      setError("비밀번호 변경 중 오류가 발생했습니다.");
+      setError("회원정보 수정 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
@@ -155,7 +156,7 @@ export default function MyPage() {
           />
         </div>
 
-        {/* 닉네임 (읽기 전용 - API 없음) */}
+        {/* 닉네임 (읽기 전용) */}
         <div className="mb-3">
           <label className="form-label">닉네임</label>
           <input
@@ -165,7 +166,6 @@ export default function MyPage() {
             value={userInfo.nickname}
             readOnly
           />
-          <small className="text-muted">닉네임 수정 api없음 ..</small>
         </div>
 
         {/* 새 비밀번호 */}
@@ -213,7 +213,7 @@ export default function MyPage() {
           </p>
         )}
 
-        {/* 사용자 유형 (읽기 전용 - API 없음) */}
+        {/* 사용자 유형 (수정 가능) */}
         <div className="mb-3">
           <label className="form-label">사용자 유형</label>
 
@@ -223,7 +223,7 @@ export default function MyPage() {
               name="userType"
               id="record"
               checked={userInfo.interesting === "record"}
-              disabled
+              onChange={() => handleUserTypeChange("record")}
             />
             <label htmlFor="record" className="card-check">
               <h4>기록형</h4>
@@ -238,7 +238,7 @@ export default function MyPage() {
               name="userType"
               id="goal"
               checked={userInfo.interesting === "goal"}
-              disabled
+              onChange={() => handleUserTypeChange("goal")}
             />
             <label htmlFor="goal" className="card-check">
               <h4>목표형</h4>
@@ -248,7 +248,6 @@ export default function MyPage() {
               </p>
             </label>
           </div>
-          <small className="text-muted">사용자 유형 변경 수정 api없음 ..</small>
         </div>
 
         <button 
@@ -256,7 +255,7 @@ export default function MyPage() {
           className="btn btn-primary w-100"
           disabled={loading}
         >
-          {loading ? "변경 중..." : "비밀번호 변경"}
+          {loading ? "수정 중..." : "회원정보 수정"}
         </button>
       </form>
     </div>

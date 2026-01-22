@@ -24,6 +24,11 @@ class MemberService {
   verifyPassword(password){
     return axios.post(`${BASE_URL}/verify-password`,{password},{headers:authHeader()})
   }
+
+  //관심사 수정
+  changeInteresting(interesting){
+  return axios.post(`${BASE_URL}/change-interesting`, {interesting}, {headers:authHeader()})
+}
 }
 
 const memberService = new MemberService()

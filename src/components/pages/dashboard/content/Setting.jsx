@@ -30,7 +30,7 @@ export default function Setting() {
       <div className="dash-board-con card setting">
         <form onSubmit={handleSubmit}>
           <img src="/images/dashboard/ico-password.svg" alt="" />
-          <p>비밀번호를 입력해주세요.</p>
+          <h3>비밀번호를 입력해주세요.</h3>
           <input type="password" placeholder="비밀번호를 입력해주세요." value={password} onChange={(e)=>setPassword(e.target.value)} required/>
           {error && <p className="text-danger">{error}</p>}
           <button  type="submit"className="btn btn-primary">확인</button>
