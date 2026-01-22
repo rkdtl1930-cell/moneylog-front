@@ -35,6 +35,7 @@ import BoardView from './components/pages/landing/board/BoardView';
 
 
 
+
 function App() {
   return (
     <>

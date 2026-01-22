@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import noticeService from "../../services/notice.service";
+import "../landing/notice/Notice.css";
 
 export default function Admin(){
   const [notices, setNotices] = useState([]);
@@ -64,7 +65,7 @@ export default function Admin(){
 
   return(
     <div className="container mt-4">
-      <h3>공지사항(관리자 페이지)</h3>
+      <h3 class="page-title">공지사항(관리자 페이지)</h3>
       <button className="btn btn-primary" onClick={()=>navigate("/notice/write")}>
         공지사항 작성
       </button>

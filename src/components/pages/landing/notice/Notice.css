@@ -1,0 +1,254 @@
+/*notice list 시작*/
+
+.notice-page {
+  padding-top: 28px;
+  padding-bottom: 28px;
+}
+
+.notice-layout {
+  width: min(1100px, 96%);
+  margin: 0 auto; 
+}
+
+.notice-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px; 
+  margin-bottom: 12px;
+}
+
+.notice-title {
+  font-size: 28px;       
+  font-weight: 500;
+  letter-spacing: -0.3px;
+  color: #111;           
+  margin: 6px 0 14px;
+}
+
+.notice-write-btn {
+  background: #2f6fff;       
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  align-self: flex-end; 
+}
+
+.notice-table-wrap {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px; 
+  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+}
+
+.notice-table {
+  width: 100%;
+  margin-bottom: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.notice-table.table-bordered {
+  border: 1px solid #e9ecef;
+}
+
+
+.notice-table thead th {
+  background: #f8f9fa;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.notice-table tbody td {
+  padding: 14px 12px;
+  font-size: 15px;
+  border-top: 1px solid #f1f3f5;
+  vertical-align: middle;
+}
+
+.notice-row:hover {
+  background: transparent !important;
+}
+.notice-table tbody tr,
+.notice-table tbody tr:hover {
+  background: transparent !important;
+}
+
+.col-num,
+.col-date {
+  text-align: center;
+  white-space: nowrap;
+  color: #111;
+}
+
+.col-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
+  color: #111;
+}
+
+.notice-empty {
+  padding: 28px 0 !important;
+}
+
+/*notice list 끝*/
+
+/* 페이지네이션 시작 */
+.notice-pagination {
+  margin-top: 18px;
+  width: 100%;           
+  display: flex;
+  justify-content: center;
+}
+
+.notice-pagination .pagination {
+  gap: 8px;
+}
+
+.notice-pagination .page-link {
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  padding: 8px 12px;
+  color: #1f2a37;
+  background: #fff;
+}
+
+.notice-pagination .page-item.active .page-link {
+  border-color: #2f6fff;
+  background: #2f6fff;
+  color: #fff;
+  font-weight: 800;
+}
+
+.notice-pagination .page-link:focus {
+  box-shadow: none;
+}
+/* 페이지네이션 끝 */
+
+/* NoticeView 시작 */
+.notice-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.notice-actions-right{
+  display:flex;
+  justify-content: flex-end;
+  gap:10px;
+}
+
+.notice-card {
+  position: relative;     
+  padding-top: 18px;
+}
+
+.notice-card .btn-notice-back {
+  position: absolute;
+  top: 28px;              
+  right: 24px;
+  margin: 0 !important; 
+}
+
+.notice-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  margin-top: 50px
+}
+
+
+/* 제목(리스트의 제목과 같은 톤으로) */
+.notice-card .notice-title {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  color: #111;
+  margin: 0 0 10px;
+}
+
+/* 작성일 */
+.notice-date {
+  font-size: 14px;
+  color: #6b7280; /* 회색 텍스트 */
+  margin-bottom: 18px;
+  padding-right: 120px; 
+}
+
+/* 본문 */
+.notice-content {
+  font-size: 15px;
+  line-height: 1.75;
+  color: #111;
+  white-space: pre-wrap; /* 줄바꿈/개행 유지 */
+  word-break: break-word;
+  padding-top: 14px;
+  border-top: 1px solid #f1f3f5;
+}
+
+/* 버튼 공통 */
+.btn-notice-primary {
+  background: #2f6fff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-notice-outline {
+  background: #fff;
+  color: #2f6fff;
+  border: 1px solid #cfe0ff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-notice-danger {
+  background: #fff;
+  color: #dc3545;
+  border: 1px solid #f4c7cd;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 목록으로 버튼(부트스트랩 btn과 섞어 쓰는 스타일) */
+.btn-notice-back {
+  background: #2f6fff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* hover 디테일은 나중에 한다고 했으니 최소만 */
+.btn-notice-back:hover {
+  color: #fff;
+  opacity: 0.95;
+}
+
+/* NoticeView 끝 */
+
+/* Noticewrite 시작 */
+
+
+/* Noticewrite 끝 */
+
