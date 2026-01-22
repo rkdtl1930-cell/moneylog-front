@@ -1,0 +1,16 @@
+.member-wrap{width: 100%; min-height: 100vh; background: #f1f1f1; padding: 100px 0;}
+.member-wrap > h1{font-size: 32px; text-align: center; margin-bottom: 24px;}
+.member{padding: 50px; max-width: 600px; margin: 0 auto; border-radius: 32px; background: #fff;}
+.member form{display: flex; gap: 10px; flex-direction: column; width: 100%;}
+.member .input-group{display: flex; flex-wrap: wrap; align-items: center; width: 100%;}
+.member .input-group label{font-size: 12px; width: 70px;}
+.member .input-group input{flex: 1;}
+.member .input-group .invalid-feedback{width: 100%; padding-left: 70px; margin-top: 4px; font-size: 12px;}
+.member .input-group .btn-primary{height: 40px; margin-left: 12px;}
+.member .type-box label{font-size: 12px; }
+.member .card-check-group{margin-top: 12px;}
+.member .loginBtn{padding: 12px; margin-top: 12px;}
+
+.member .link-box {text-align: center; margin-top: 20px; }
+.member .link-box p{font-size: 12px; color: #666; text-align: center; margin-bottom: 4px;}
+.member .link-box a{color: var(--main-color); font-size: 14px; text-decoration: underline;}

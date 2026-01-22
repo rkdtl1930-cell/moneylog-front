@@ -85,9 +85,10 @@ align-items: center; justify-content: center; position: absolute; top: 10px; rig
 
 /* 설정 페이지 */
 .setting{text-align: center; max-width: 600px; margin: 0 auto;}
+.setting img{width: 50px;}
 .setting > form{display: flex; align-items: center; flex-direction: column; gap: 8px;}
-.setting input[type="password"]{width: 100%;}
-.setting > p{font-size: 17px;}
+.setting input[type="password"]{width: 100%; font-size: 14px;}
+.setting p{font-size: 17px; text-align: left;}
  
 /* 마이 페이지 */
 .mypage{max-width: 600px; margin: 0 auto;}

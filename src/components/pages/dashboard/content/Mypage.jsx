@@ -1,22 +1,71 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import memberService from "../../../services/member.service";
+import useUserStore from "../../../store/useUserStore";
 
 export default function MyPage() {
-  const navigate = useNavigate();
+  const currentUser = useUserStore((state) => state.user);
+
+  // 사용자 정보
+  const [userInfo, setUserInfo] = useState({
+    id: "",
+    username: "",
+    name: "",
+    nickname: "",
+    interesting: "record"
+  });
 
   // 비밀번호
   const [newPassword, setNewPassword] = useState("");
   const [confirmPW, setConfirmPw] = useState("");
   const [match, setMatch] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // 고객 유형
-  const [userType, setUserType] = useState("record");
+  // 컴포넌트 마운트 시 회원 정보 불러오기
+  useEffect(() => {
+    if (currentUser?.username) {
+      loadMemberInfo();
+    }
+  }, [currentUser]);
+
+  const loadMemberInfo = async () => {
+    try {
+      const response = await memberService.getMember(currentUser.username);
+      console.log("Member info:", response.data);
+      
+      setUserInfo({
+        id: response.data.id || "",
+        username: response.data.username || "",
+        name: response.data.name || "",
+        nickname: response.data.nickname || "",
+        interesting: response.data.interesting || "record"
+      });
+    } catch (err) {
+      console.error("회원 정보 불러오기 실패:", err);
+      setError("회원 정보를 불러오는데 실패했습니다.");
+    }
+  };
+
+  const handleUserInfoChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleUserTypeChange = (type) => {
+    setUserInfo(prev => ({
+      ...prev,
+      interesting: type
+    }));
+  };
 
   const handleNewPasswordChange = (e) => {
     setNewPassword(e.target.value);
     setMatch("");
+    setError("");
   };
 
   const handleConfirmPasswordChange = (e) => {
@@ -36,19 +85,44 @@ export default function MyPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (newPassword !== confirmPW) {
-      setError("비밀번호가 일치하지 않습니다.");
+    // 비밀번호를 입력한 경우에만 일치 여부 확인
+    if (newPassword || confirmPW) {
+      if (newPassword !== confirmPW) {
+        setError("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+
+      if (!newPassword) {
+        setError("새 비밀번호를 입력해주세요.");
+        return;
+      }
+    }
+
+    // 비밀번호 변경만 가능 (현재 API 기준)
+    if (!newPassword) {
+      setError("변경할 비밀번호를 입력해주세요.");
       return;
     }
 
+    setLoading(true);
+
     try {
       await memberService.changPassword(newPassword);
-      // userType도 여기서 같이 보내면 됨
-      navigate("/dashboard/main");
+      
+      alert("비밀번호가 변경되었습니다.");
+      
+      // 비밀번호 필드 초기화
+      setNewPassword("");
+      setConfirmPw("");
+      setMatch("");
+      
     } catch (err) {
       console.error(err);
       setError("비밀번호 변경 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -57,25 +131,41 @@ export default function MyPage() {
       <h3>마이페이지</h3>
 
       <form onSubmit={handleSubmit} className="card">
-        {/* 이름 */}
+        {error && <p className="text-danger mb-3">{error}</p>}
+
+        {/* 아이디 (읽기 전용) */}
+        <div className="mb-3">
+          <label className="form-label">아이디</label>
+          <input
+            type="text"
+            className="form-control"
+            value={userInfo.username}
+            readOnly
+          />
+        </div>
+
+        {/* 이름 (읽기 전용) */}
         <div className="mb-3">
           <label className="form-label">이름</label>
           <input
             type="text"
             className="form-control"
-            value="홍길동"
+            value={userInfo.name}
             readOnly
           />
         </div>
 
-        {/* 닉네임 */}
+        {/* 닉네임 (읽기 전용 - API 없음) */}
         <div className="mb-3">
           <label className="form-label">닉네임</label>
           <input
             type="text"
+            name="nickname"
             className="form-control"
-            value="닉네임"
+            value={userInfo.nickname}
+            readOnly
           />
+          <small className="text-muted">닉네임 수정 api없음 ..</small>
         </div>
 
         {/* 새 비밀번호 */}
@@ -90,7 +180,7 @@ export default function MyPage() {
             value={newPassword}
             onChange={handleNewPasswordChange}
             autoComplete="new-password"
-            required
+            placeholder="새 비밀번호를 입력하세요"
           />
         </div>
 
@@ -106,7 +196,7 @@ export default function MyPage() {
             value={confirmPW}
             onChange={handleConfirmPasswordChange}
             autoComplete="new-password"
-            required
+            placeholder="비밀번호를 다시 입력하세요"
           />
         </div>
 
@@ -115,27 +205,25 @@ export default function MyPage() {
           <p
             className={
               match.includes("일치합니다")
-                ? "text-success"
-                : "text-danger"
+                ? "text-success mb-3"
+                : "text-danger mb-3"
             }
           >
             {match}
           </p>
         )}
 
-        {error && <p className="text-danger">{error}</p>}
-
-        {/* 고객 유형 */}
+        {/* 사용자 유형 (읽기 전용 - API 없음) */}
         <div className="mb-3">
-          <label className="form-label">고객 유형</label>
+          <label className="form-label">사용자 유형</label>
 
           <div className="card-check-group">
             <input
               type="radio"
               name="userType"
               id="record"
-              checked={userType === "record"}
-              onChange={() => setUserType("record")}
+              checked={userInfo.interesting === "record"}
+              disabled
             />
             <label htmlFor="record" className="card-check">
               <h4>기록형</h4>
@@ -149,8 +237,8 @@ export default function MyPage() {
               type="radio"
               name="userType"
               id="goal"
-              checked={userType === "goal"}
-              onChange={() => setUserType("goal")}
+              checked={userInfo.interesting === "goal"}
+              disabled
             />
             <label htmlFor="goal" className="card-check">
               <h4>목표형</h4>
@@ -160,10 +248,15 @@ export default function MyPage() {
               </p>
             </label>
           </div>
+          <small className="text-muted">사용자 유형 변경 수정 api없음 ..</small>
         </div>
 
-        <button type="submit" className="btn btn-primary w-100">
-          회원정보 수정
+        <button 
+          type="submit" 
+          className="btn btn-primary w-100"
+          disabled={loading}
+        >
+          {loading ? "변경 중..." : "비밀번호 변경"}
         </button>
       </form>
     </div>
