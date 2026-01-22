@@ -31,7 +31,8 @@ import BoardList from './components/pages/landing/board/BoardList';
 import BoardWrite from './components/pages/landing/board/BoardWrite';
 import BoardModify from './components/pages/landing/board/BoardModify';
 import BoardView from './components/pages/landing/board/BoardView';
-
+import Mypage from './components/pages/dashboard/content/Mypage';
+import AdminPage from './components/pages/dashboard/content/Admin';
 
 
 
@@ -86,6 +87,8 @@ function App() {
         <Route path="expense" element={<Expense />} /> {/* /dashboard/expense */}
         <Route path="statistics" element={<Statistics />} /> {/* /dashboard/statistics */}
         <Route path="setting" element={<Setting />} /> {/* /dashboard/setting */}
+        <Route path="mypage" element={<Mypage />} /> {/* /dashboard/mypage */}
+        <Route path="admin" element={<AdminPage />} /> {/* /dashboard/admin */}
         </Route>
       </Routes>
     </>

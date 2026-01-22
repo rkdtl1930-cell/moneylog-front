@@ -80,7 +80,7 @@ export default function Chatbot() {
               className="close-btn"
               onClick={() => setIsOpen(false)}
             >
-              ✕
+              X
             </button>
           </div>
 

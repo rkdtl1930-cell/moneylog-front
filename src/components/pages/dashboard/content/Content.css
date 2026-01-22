@@ -1,4 +1,6 @@
 /* 대시보드 > 콘텐츠 페이지 css*/
+input{padding: 12px; font-size: 12px; border-radius: 4px; outline: none; border: 1px solid #ccc; background: #fff;}
+.text-danger{color: #E2523F;}
 
 /* 공통 */
 .dash-board-con{display: flex; flex-direction: column; gap: 16px;}
@@ -19,7 +21,7 @@ border-radius: 6px;}
 .search-bar input[type="date"]::-webkit-inner-spin-button {
   width: 16px; height: 16px;
   background: url(/images/dashboard/ico-calendar.svg) no-repeat center / cover} 
-.search-bar .btn-box{display: flex; gap: 2px; width: unset; flex: unset;}
+.search-bar .btn-box{display: flex; gap: 6px; width: unset; flex: unset;}
 .search-bar .btn{padding: 10px;}
 
 .no-data{font-size: 15px; color: #666;}
@@ -34,6 +36,8 @@ border-radius: 6px;}
 .common-table .del-btn{color: #E2523F; border: 1px solid #E2523F; margin-left: 2px;}
 .common-table .income > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
 .common-table .expense > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
+.common-table .admin > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
+.common-table .user > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
 
 .pagination{gap:6px; text-align: center; margin-top: 20px;}
 .page-item{}
@@ -51,7 +55,7 @@ border-radius: 4px; cursor: pointer;}
 .week{display: flex; align-items: start; margin-top: 20px;}
 .week button{flex: 1; background-color: #fff; border: none; cursor: pointer;}
 .week button .day{font-size: 14px; color: #3B4662; margin-bottom: 4px;}
-.week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; }
+.week button .number{font-size: 13px; padding:8px; display: inline-block;border-radius: 20px; width: 30px; height: 30px;}
 .week button.selected .number{background: #B59CE9; }
 .week button span{display: block; font-size: 12px; font-family: 'Open Sans'; margin-top: 1px;}
 .week button span.income{color: var(--main-color);}
@@ -80,3 +84,26 @@ align-items: center; justify-content: center; position: absolute; top: 10px; rig
 .category-legend .legend-color{width: 12px; height: 12px; display: inline-block; vertical-align: middle; border-radius: 4px;}
 .category-legend .legend-item{display: flex; gap: 4px;}
 .category-legend .legend-text{font-size: 12px;}
+
+/* 설정 페이지 */
+.setting{text-align: center; max-width: 600px; margin: 0 auto;}
+.setting img{width: 50px;}
+.setting > form{display: flex; align-items: center; flex-direction: column; gap: 8px;}
+.setting input[type="password"]{width: 100%; font-size: 14px;}
+.setting h3{font-size: 17px; text-align: left;}
+.setting p{font-size: 13px;}
+ 
+/* 마이 페이지 */
+.mypage{max-width: 600px; margin: 0 auto;}
+.mypage > h3{font-size: 20px;}
+.mypage form{display: flex; gap: 10px; flex-direction: column;}
+.mypage form label{display: block; font-size: 13px; margin-bottom: 4px; color: #3B4662;}
+.mypage form input{width: 100%; font-size: 14px;}
+.mypage form input:read-only{background: #f1f1f1; }
+
+.card-check-group { display: flex; gap: 16px; }
+.card-check-group input {display: none;}
+.card-check { flex: 1;padding: 20px;border-radius: 4px; cursor: pointer;background: #f3f3f3;transition: all 0.25s ease;}
+.card-check-group input:checked + .card-check {background: #74D8CC;}
+.card-check-group h4{font-size: 17px; margin-bottom: 12px; font-family: 'Isamanru'; font-weight: 300;}
+.card-check-group p{font-size: 13px; word-break: keep-all; line-height: 1.5; color: #444444;}

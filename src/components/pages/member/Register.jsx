@@ -1,74 +1,136 @@
 import { useEffect, useState } from 'react';
-import Member from '../../models/Member';
 import useUserStore from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { checkUsernameService, registerService } from '../../services/auth.service';
+import './Member.css'
 
 export default function Register() {
-  const [member, setMember] = useState(new Member('', '', ''));
-  const [submitted, setSubmitted] = useState('');
+  // 백엔드 스펙에 맞춘 초기 state
+  const [member, setMember] = useState({
+    username: '',
+    password: '',
+    name: '',
+    nickname: '',
+    // interesting: 'record' // 기본값: 기록형
+  });
+
+  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMessage, setErrormessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const currentUser = useUserStore((state) => state.user);
   const navigate = useNavigate();
   const [passwordConfirm, setPasswordConfirm] = useState('');
   const [usernameAvailable, setUsernameAvailable] = useState(null);
-  const [selectedGoal, setSelectedGoal] = useState('calm'); //챗봇 성격
 
-  // 체크박스 옵션 : 하나만 선택, 디폴트는 운영관리형
-  const GOAL_OPTIONS = [
-    { id: 'budget', label: '예산 코치형_예산 안에서 마음 편히 쓰는 연습을 하고 싶어요' },
-    { id: 'leak', label: '패턴 분석형_새는 돈(구독·배달·충동구매)부터 잡고 싶어요' },
-    { id: 'goal', label: '리마인드형_목표 금액/기한을 정해서 ‘완주’하고 싶어요' },
-    { id: 'calm', label: '운영 관리형_무리하지 않는 선에서 꾸준히 관리하고 싶어요' },
-  ];
+  // 각 필드별 에러 state
+  const [errors, setErrors] = useState({
+    name: false,
+    nickname: false,
+    username: false,
+    password: false,
+    passwordConfirm: false
+  });
 
   useEffect(() => {
     if (currentUser?.id) {
       navigate('/profile');
     }
-  }, []);
+  }, [currentUser, navigate]);
 
   const handleRegister = (e) => {
     e.preventDefault();
     setSubmitted(true);
-    if (!member.name || !member.password || !member.name) {
+
+    // 유효성 검사
+    const newErrors = {
+      name: !member.name,
+      nickname: !member.nickname,
+      username: !member.username,
+      password: !member.password,
+      passwordConfirm: !passwordConfirm
+    };
+
+    setErrors(newErrors);
+
+    // 하나라도 에러가 있으면 return
+    if (Object.values(newErrors).some(error => error)) {
       return;
     }
+
+    // 비밀번호 확인 검사
+    if (member.password !== passwordConfirm) {
+      setErrorMessage('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    // 아이디 중복 확인 체크
+    if (usernameAvailable !== true) {
+      setErrorMessage('아이디 중복 확인을 해주세요.');
+      return;
+    }
+
     setLoading(true);
-    registerService(member)
+    setErrorMessage('');
+
+    // 백엔드로 전송할 데이터
+    const registerData = {
+      username: member.username,
+      password: member.password,
+      name: member.name,
+      nickname: member.nickname,
+    };
+
+    registerService(registerData)
       .then((response) => {
         console.log(response.data);
         navigate('/login');
       })
       .catch((error) => {
         console.log(error);
-        if (error?.response?.status == 409) {
-          setErrormessage('이미 존재하는 아이디 입니다.');
+        if (error?.response?.status === 409) {
+          setErrorMessage('이미 존재하는 아이디입니다.');
         } else {
-          setErrormessage('예상하지 못한 에러가 발생했습니다.');
+          setErrorMessage('예상하지 못한 에러가 발생했습니다.');
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'goalType') {
-      setSelectedGoal(value);
-      return;
-    }
     setMember((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+    
+    // 입력하면 해당 필드 에러 제거
+    if (submitted) {
+      setErrors(prev => ({
+        ...prev,
+        [name]: false
+      }));
+    }
   };
 
   const handlePasswordConfirmChange = (e) => {
     setPasswordConfirm(e.target.value);
+    
+    // 입력하면 에러 제거
+    if (submitted) {
+      setErrors(prev => ({
+        ...prev,
+        passwordConfirm: false
+      }));
+    }
   };
 
   const checkUsernameAvailability = () => {
-    if (!member.username) return;
+    if (!member.username) {
+      setErrorMessage('아이디를 입력해주세요.');
+      return;
+    }
     checkUsernameService(member.username)
       .then((res) => {
         setUsernameAvailable(res.data.available);
@@ -81,95 +143,157 @@ export default function Register() {
 
   return (
     <>
-      <div className="container mt-5">
-        <div className="card ms-auto me-auto p-3 shadow-lg custom-card">
+      <div className='member-wrap'>
+        <h1>회원가입</h1>
+        <div className="member">
           {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-          <form onSubmit={handleRegister} noValidate className={submitted ? 'was-validated' : ''}>
-            <label htmlFor="name">이름</label>
-            <input
-              type="text"
-              name="name"
-              className="form-control"
-              placeholder="name"
-              value={member.name}
-              onChange={handleChange}
-              required
-            />
-            <div className="invalid-feedback">이름을 입력해주세요</div>
-            <label htmlFor="username">아이디</label>
-            <div className="input-group mb-2">
+          <form onSubmit={handleRegister} noValidate>
+            {/* 이름 입력 */}
+            <div className="input-group">
+              <label htmlFor="name">이름</label>
+              <input
+                type="text"
+                name="name"
+                className="form-control"
+                placeholder="이름을 입력하세요"
+                value={member.name}
+                onChange={handleChange}
+                required
+              />
+              {submitted && errors.name && (
+                <div className="invalid-feedback">이름을 입력해주세요</div>
+              )}
+            </div>
+
+            {/* 닉네임 입력 */}
+            <div className="input-group">
+              <label htmlFor="nickname">닉네임</label>
+              <input
+                type="text"
+                name="nickname"
+                className="form-control"
+                placeholder="닉네임을 입력하세요"
+                value={member.nickname}
+                onChange={handleChange}
+                required
+              />
+              {submitted && errors.nickname && (
+                <div className="invalid-feedback">닉네임을 입력해주세요</div>
+              )}
+            </div>
+
+            {/* 아이디 입력 */}
+            <div className="input-group">
+              <label htmlFor="username">아이디</label>
               <input
                 type="text"
                 name="username"
                 className="form-control"
-                placeholder="username"
+                placeholder="아이디를 입력하세요"
                 value={member.username}
                 onChange={handleChange}
                 required
               />
-              <button type="button" className="btn btn-ouline-secondary" onClick={checkUsernameAvailability}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={checkUsernameAvailability}
+              >
                 중복확인
               </button>
-            </div>
-            {usernameAvailable === true && <div className="text-success mb-2">사용 가능한 아이디입니다.</div>}
-            {usernameAvailable === false && <div className="text-danger mb-2">이미 존재하는 아이디입니다.</div>}
-            <div className="invalid-feedback">아이디를 입력해주세요</div>
-            <label htmlFor="password">비밀번호</label>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder="password"
-              value={member.password}
-              onChange={handleChange}
-              required
-            />
-            <div className="invalid-feedback">비밀번호를 입력해주세요</div>
-            <label htmlFor="passwordConfirm">비밀번호 확인</label>
-            <input
-              type="password"
-              name="passwordConfirm"
-              className="form-control"
-              placeholder="password confirm"
-              value={passwordConfirm}
-              onChange={handlePasswordConfirmChange}
-              required
-            />
-            {passwordConfirm && member.password !== passwordConfirm && (
-              <div className="text-danger">비밀번호가 일치하지 않습니다.</div>
-            )}
-            {passwordConfirm && member.password === passwordConfirm && (
-              <div className="text-success">비밀번호가 일치합니다.</div>
-            )}
-            {/* 챗봇 모드선택 */}
-
-            <div className="mt-4 p-3 border rounded">
-              <div className="form-text goal-help">
-                선택한 유형에 따라 챗봇의 조언 방식이 달라져요. (기본값: 운영 관리형)
-              </div>
-
-              <div className="d-flex flex-column gap-2">
-                {GOAL_OPTIONS.map((opt) => (
-                  <div className="form-check" key={opt.id}>
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="goalType"
-                      id={`goal-${opt.id}`}
-                      value={opt.id}
-                      checked={selectedGoal === opt.id}
-                      onChange={handleChange}
-                    />
-                    <label className="form-check-label" htmlFor={`goal-${opt.id}`}>
-                      {opt.label}
-                    </label>
-                  </div>
-                ))}
-              </div>
+              {submitted && errors.username && (
+                <div className="invalid-feedback">아이디를 입력해주세요</div>
+              )}
+              {usernameAvailable === true && (
+                <div className="text-success invalid-feedback">사용 가능한 아이디입니다.</div>
+              )}
+              {usernameAvailable === false && (
+                <div className="text-danger invalid-feedback">이미 존재하는 아이디입니다.</div>
+              )}
             </div>
 
-            <button className="btn btn-info text-white w-100 mt-3" disabled={loading}>
-              회원가입
+            {/* 비밀번호 입력 */}
+            <div className="input-group">
+              <label htmlFor="password">비밀번호</label>
+              <input
+                type="password"
+                name="password"
+                className="form-control"
+                placeholder="비밀번호를 입력하세요"
+                value={member.password}
+                onChange={handleChange}
+                required
+              />
+              {submitted && errors.password && (
+                <div className="invalid-feedback">비밀번호를 입력해주세요</div>
+              )}
+            </div>
+
+            {/* 비밀번호 확인 */}
+            <div className="input-group">
+              <label htmlFor="passwordConfirm">비밀번호 확인</label>
+              <input
+                type="password"
+                name="passwordConfirm"
+                className="form-control"
+                placeholder="비밀번호를 다시 입력하세요"
+                value={passwordConfirm}
+                onChange={handlePasswordConfirmChange}
+                required
+              />
+              {submitted && errors.passwordConfirm && (
+                <div className="invalid-feedback">비밀번호 확인을 입력해주세요</div>
+              )}
+              {passwordConfirm && member.password !== passwordConfirm && (
+                <div className="text-danger invalid-feedback">비밀번호가 일치하지 않습니다.</div>
+              )}
+              {passwordConfirm && member.password === passwordConfirm && (
+                <div className="text-success invalid-feedback">비밀번호가 일치합니다.</div>
+              )}
+            </div>
+
+            {/* 사용자 유형 선택 (기록형/목표형) */}
+            {/* <div className="type-box">
+              <label className="form-label fw-bold">사용자 유형 선택</label>
+              <div className="card-check-group">
+                <input
+                  type="radio"
+                  name="userType"
+                  id="record"
+                  checked={member.interesting === "record"}
+                  onChange={() => handleUserTypeChange("record")}
+                />
+                <label htmlFor="record" className="card-check">
+                  <h4>기록형</h4>
+                  <p>
+                    매일의 수입과 지출을 빠르게 기록하고
+                    소비 흐름을 한눈에 확인하고 싶은 분
+                  </p>
+                </label>
+
+                <input
+                  type="radio"
+                  name="userType"
+                  id="goal"
+                  checked={member.interesting === "goal"}
+                  onChange={() => handleUserTypeChange("goal")}
+                />
+                <label htmlFor="goal" className="card-check">
+                  <h4>목표형</h4>
+                  <p>
+                    한 달 목표 금액을 정하고
+                    지금 얼마나 가까워졌는지 확인하고 싶은 분
+                  </p>
+                </label>
+              </div>
+            </div> */}
+
+            {/* 회원가입 버튼 */}
+            <button
+              className="btn btn-primary loginBtn"
+              disabled={loading}
+            >
+              {loading ? '처리중...' : '회원가입'}
             </button>
           </form>
         </div>

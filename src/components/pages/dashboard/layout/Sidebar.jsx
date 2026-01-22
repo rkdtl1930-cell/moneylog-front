@@ -8,16 +8,26 @@ import Popup from '../popup/Popup';
 import useBudgetStore from '../../../store/monthlyExpense ';
 
 export default function Sidebar() {
-  //메뉴
-  const menuItems = [
+  const currentUser = useUserStore((state) => state.user);
+  const mid = currentUser?.id;
+  const isAdmin = currentUser?.role === 'ADMIN' || currentUser?.role === 'ROLE_ADMIN';
+
+  // 기본 메뉴
+  const baseMenuItems = [
     { path: '/dashboard/main', iconOff: '/images/dashboard/icons/home-off.svg', iconOn: '/images/dashboard/icons/home-on.svg', label: '대시보드', end: true },
     { path: '/dashboard/expense', iconOff: '/images/dashboard/icons/expense-off.svg', iconOn: '/images/dashboard/icons/expense-on.svg', label: '지출 내역' },
-    // { path: '/dashboard/statistics', iconOff: '/images/dashboard/icons/statistics-off.svg', iconOn: '/images/dashboard/icons/statistics-on.svg', label: '통계' },
     { path: '/dashboard/setting', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '설정' },
   ];
 
-  const currentUser = useUserStore((state) => state.user);
-  const mid = currentUser?.id;
+  // 관리자 전용 메뉴
+  const adminMenuItems = [
+    { path: '/dashboard/admin', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
+  ];
+
+  // role이 ADMIN이면 관리자 메뉴 추가
+  const menuItems = currentUser?.role === 'ADMIN' 
+    ? adminMenuItems
+    : baseMenuItems;
 
   const [budgets, setBudgets] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
@@ -108,10 +118,10 @@ export default function Sidebar() {
 
   // 남은 금액 및 사용률 계산
   const usedRate = currentBudget
-  ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1)
-  : 0;
+    ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1)
+    : 0;
 
-  
+
   return (
     <aside className="sidebar">
       <div className="con">
@@ -139,62 +149,64 @@ export default function Sidebar() {
       </div>
 
       {/* 예산 현황 */}
-      <div className="balance-wrap">
-        <div className="balance-header">
-          <p className="month">{currentMonth}월 지출금액</p>
-          {currentBudget ? (
-            <button className="btn-modify" onClick={handleOpenBudget}>
-              한도수정
-            </button>
-          ) : (
-            <button className="btn-set" onClick={handleOpenBudget}>
-              한도설정
-            </button>
-          )}
-        </div>
-
-        <div className="balance-box">
-          {currentBudget ? (
-            // 한도 설정 있을 시
-            <>
-              <div className="amount">
-                <span className="value">{monthlyExpense.toLocaleString()}</span>원
-              </div>
-            </>
-          ) : (
-            // 한도 설정 없을시
-            <>
-              <p className="empty-text">
-                {currentMonth}월의 한도가 설정되지 않았어요.<br />
-                한도를 설정해주세요.
-              </p>
-            </>
-          )}
-        </div>
-        {/* 바 그래프 */}
-       {currentBudget && (
-          <div className="progress-wrap">
-            <div className="progress-bar">
-              <div
-                className="progress-fill"
-                style={{
-                  width: `${Math.min(usedRate, 100)}%`,height:'100%',
-                  backgroundColor: usedRate > 50 ? "#f75b50" : "#157AFF"
-                }}
-              />
-            </div>
-            <div className="progress-text">
-              {monthlyExpense.toLocaleString()} /{" "}
-              {currentBudget.limitAmount.toLocaleString()}
-            </div>
+      {!isAdmin && (
+        <div className="balance-wrap">
+          <div className="balance-header">
+            <p className="month">{currentMonth}월 지출금액</p>
+            {currentBudget ? (
+              <button className="btn-modify" onClick={handleOpenBudget}>
+                한도수정
+              </button>
+            ) : (
+              <button className="btn-set" onClick={handleOpenBudget}>
+                한도설정
+              </button>
+            )}
           </div>
-        )}
-      </div>
+
+          <div className="balance-box">
+            {currentBudget ? (
+              // 한도 설정 있을 시
+              <>
+                <div className="amount">
+                  <span className="value">{monthlyExpense.toLocaleString()}</span>원
+                </div>
+              </>
+            ) : (
+              // 한도 설정 없을시
+              <>
+                <p className="empty-text">
+                  {currentMonth}월의 한도가 설정되지 않았어요.<br />
+                  한도를 설정해주세요.
+                </p>
+              </>
+            )}
+          </div>
+          {/* 바 그래프 */}
+          {currentBudget && (
+            <div className="progress-wrap">
+              <div className="progress-bar">
+                <div
+                  className="progress-fill"
+                  style={{
+                    width: `${Math.min(usedRate, 100)}%`, height: '100%',
+                    backgroundColor: usedRate > 50 ? "#f75b50" : "#157AFF"
+                  }}
+                />
+              </div>
+              <div className="progress-text">
+                {monthlyExpense.toLocaleString()} /{" "}
+                {currentBudget.limitAmount.toLocaleString()}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       <Popup open={showEdit} onClose={closeEdit}>
         <div className="popup-header">
           <h3>예산 설정</h3>
-          <button className="close-btn" onClick={closeEdit}>×</button>
+          <button className="close-btn" onClick={closeEdit}><img src="/images/dashboard/ico-close.svg" alt="" /></button>
         </div>
 
         <div className="popup-body">
