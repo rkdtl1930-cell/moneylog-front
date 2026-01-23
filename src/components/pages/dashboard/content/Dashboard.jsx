@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import useUserStore from '../../../store/useUserStore';
 import transactionService from '../../../services/transaction.service';
 import { TransactionType } from '../../../models/TransactionType';
+import useTransactionStore from '../../../store/useTransactionStore';
 import './Content.css'
 import Popup from '../popup/Popup';
 import {
@@ -50,9 +51,15 @@ const Dashboard = () => {
   };
 
   const setMonthlyExpense = useBudgetStore(state => state.setMonthlyExpense);
+
+  // 대시보드 리프레시
+  const refreshKey = useTransactionStore(
+    (state) => state.refreshKey
+  );
+
   useEffect(() => {
-  setMonthlyExpense(summary.expense);
-}, [summary.expense]);
+    setMonthlyExpense(summary.expense);
+  }, [summary.expense]);
 
 
   useEffect(() => {
@@ -67,7 +74,7 @@ const Dashboard = () => {
     } else {
       loadMonthlyData(selectedDate);
     }
-  }, [viewMode, selectedDate, mid]);
+  }, [viewMode, selectedDate, mid, refreshKey]);
 
   const generateWeekDates = (centerDate) => {
     const dates = [];

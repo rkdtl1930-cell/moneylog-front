@@ -21,11 +21,13 @@ export default function Sidebar() {
 
   // 관리자 전용 메뉴
   const adminMenuItems = [
-    { path: '/dashboard/admin', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
+    { path: '/dashboard/members', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
+    { path: '/dashboard/write', iconOff: '/images/dashboard/icons/write-off.svg', iconOn: '/images/dashboard/icons/write-on.svg', label: '공지사항 글쓰기' },
+
   ];
 
   // role이 ADMIN이면 관리자 메뉴 추가
-  const menuItems = currentUser?.role === 'ADMIN' 
+  const menuItems = currentUser?.role === 'ADMIN'
     ? adminMenuItems
     : baseMenuItems;
 
@@ -126,7 +128,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="con">
         <div className="logo">
-          <h1><img src={logo} alt="" /></h1>
+          <h1><NavLink to="/" className=""><img src={logo} alt="" /></NavLink></h1>
         </div>
 
         <nav className="menu">

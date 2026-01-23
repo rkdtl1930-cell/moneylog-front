@@ -135,7 +135,7 @@ export default function AdminPage() {
                 </tbody>
               </table>
 
-              {totalPages > 1 && (
+              {(members.length > 0 || totalPages > 1) && (
                 <nav aria-label="Page navigation">
                   <ul className="pagination justify-content-center">
                     {startPage > 1 && (
@@ -146,7 +146,7 @@ export default function AdminPage() {
                       </li>
                     )}
                     {pages.map((p) => (
-                      <li key={p} className={`page-item ${page === p ? 'active' : ''}`}>
+                      <li key={p} className={`page-item ${page === p ? "active" : ""}`}>
                         <button className="page-link" onClick={() => setPage(p)}>
                           {p}
                         </button>
@@ -162,6 +162,7 @@ export default function AdminPage() {
                   </ul>
                 </nav>
               )}
+
             </>
           )}
         </div>

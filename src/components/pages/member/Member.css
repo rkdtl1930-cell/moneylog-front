@@ -13,4 +13,4 @@
 
 .member .link-box {text-align: center; margin-top: 20px; }
 .member .link-box p{font-size: 12px; color: #666; text-align: center; margin-bottom: 4px;}
-.member .link-box a{color: var(--main-color); font-size: 14px; text-decoration: underline;}
+.member .link-box a{color: var(--main-color); font-size: 14px; text-decoration: underline; display: inline-block;}

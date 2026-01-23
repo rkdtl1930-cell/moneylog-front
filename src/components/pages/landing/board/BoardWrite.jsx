@@ -4,6 +4,9 @@ import useUserStore from '../../../store/useUserStore';
 import boardService from '../../../services/board.service';
 
 import { uploadFileToFirebase, deleteFileUrl } from '../../../../storage/firebaseStorage.jsx';
+import Navi from '../Navi.jsx';
+
+/* 유빈 css */
 
 export default function BoardWrite() {
   const navigate = useNavigate();
@@ -68,6 +71,8 @@ export default function BoardWrite() {
   };
 
   return (
+    <>
+    <Navi/>
     <div className="board-write container mt-4">
       <div className="board-write__card notice-card">
         <div className="board-write__header">
@@ -157,5 +162,6 @@ export default function BoardWrite() {
         </div>
       </div>
     </div>
+    </>
   );
 }

@@ -33,6 +33,8 @@ import BoardModify from './components/pages/landing/board/BoardModify';
 import BoardView from './components/pages/landing/board/BoardView';
 import Mypage from './components/pages/dashboard/content/Mypage';
 import AdminPage from './components/pages/dashboard/content/Admin';
+import Budget from './components/pages/budget/Budget';
+import ManageWrite from './components/pages/dashboard/content/BoardWrite';
 
 
 
@@ -52,6 +54,7 @@ function App() {
         <Route path="/notice/list" element={<NoticeList />} />
 
         {/* 로그인 필요하지만 누르면 알아서 로그인 창으로 이동하게 함 */}
+        <Route path='/Budget' element={<Budget/>}/>
         <Route path='/notice/view/:id' element={<NoticeView/>}/>
         <Route path='/notice/write' element={<PrivateRoute><NoticeWrite/></PrivateRoute>}/>
         <Route path='/notice/edit/:id' element={<PrivateRoute><NoticeEdit/></PrivateRoute>}/>
@@ -88,7 +91,9 @@ function App() {
         <Route path="statistics" element={<Statistics />} /> {/* /dashboard/statistics */}
         <Route path="setting" element={<Setting />} /> {/* /dashboard/setting */}
         <Route path="mypage" element={<Mypage />} /> {/* /dashboard/mypage */}
-        <Route path="admin" element={<AdminPage />} /> {/* /dashboard/admin */}
+        {/* 관리자만 */}
+        <Route path="members" element={<AdminPage />} /> {/* /dashboard/members */}
+        <Route path="write" element={<ManageWrite />} /> {/* /dashboard/board */}
         </Route>
       </Routes>
     </>

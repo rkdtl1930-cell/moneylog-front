@@ -29,7 +29,7 @@ border-radius: 6px;}
 /*테이블 공통*/
 .common-table{width: 100%; text-align: left; font-size: 13px;}
 .common-table tr th{color: #3B4662;}
-.common-table tr th, .common-table tr td{padding: 12px; border-bottom: 1px solid #e4e4e4;}
+.common-table tr th, .common-table tr td{padding: 12px; border-bottom: 1px solid #e4e4e4; font-size: 14px;}
 .common-table button{padding: 4px 6px; border-radius: 4px; }
 .common-table .btn-box{width: 150px;}
 .common-table .edit-btn{color: #0F65C7; border: 1px solid #0F65C7; margin-left: 2px;}

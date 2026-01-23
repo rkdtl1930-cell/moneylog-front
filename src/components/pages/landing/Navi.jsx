@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 
 export default function Navi() {
   const currentUser = useUserStore((state) => state.user);
+  console.log(currentUser)
   const navigate = useNavigate();
   const logout = () => {
     const clearCurrentUser = useUserStore.getState().clearCurrentUser;
@@ -18,7 +19,7 @@ export default function Navi() {
   /* 네비 이벤트 */
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-  const isMain = location.pathname === '/main';
+  const isMain = location.pathname === '/' || location.pathname === '/home';
 
   useEffect(() => {
     const onScroll = () => {
