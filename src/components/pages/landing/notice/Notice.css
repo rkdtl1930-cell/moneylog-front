@@ -101,6 +101,9 @@
 
 /*notice list 끝*/
 
+
+
+
 /* 페이지네이션 시작 */
 .notice-pagination {
   margin-top: 18px;
@@ -132,6 +135,9 @@
   box-shadow: none;
 }
 /* 페이지네이션 끝 */
+
+
+
 
 /* NoticeView 시작 */
 .notice-actions {
@@ -176,6 +182,7 @@
   margin: 0 0 10px;
   margin-bottom: 28px;
 }
+
 
 /* 작성일 */
 .notice-date {
@@ -256,6 +263,37 @@
    Notice Write (작성) 폼
    ========================= */
 
+   
+/* ===== NoticeWrite 헤더(연필 + 제목) ===== */
+.notice-header {
+  display: flex;
+  flex-direction: row;   
+  align-items: center;   
+  gap: 10px;             
+  margin-bottom: 18px;
+}
+
+.notice-write-title {
+  margin: 0 !important;      
+  line-height: 1.1;
+}
+
+.notice-icon {
+  width: 32px;
+  height: 32px;
+  filter: brightness(0);
+  flex-shrink: 0; 
+}
+
+.notice-header .notice-title {
+  margin: 0;
+}
+
+.notice-icon {
+  filter: brightness(0);
+}
+
+
 .notice-card .notice-title {
   margin-bottom: 22px;
 }
@@ -266,12 +304,15 @@
   font-weight: 700;
   color: #111;
   margin-bottom: 14px;
+  margin-top: 10px;
+  display: block;
 }
 
 .notice-card .d-flex.justify-content-between {
   justify-content: flex-end !important;
   gap: 12px;
   margin-top: 18px;
+  text-align: right;
 }
 
 .notice-input,
@@ -283,6 +324,7 @@
   font-size: 15px;
   outline: none;
   background: #fff;
+  font-family: 'Pretendard';
 }
 
 .notice-textarea {

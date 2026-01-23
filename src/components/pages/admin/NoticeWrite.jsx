@@ -26,7 +26,14 @@ export default function NoticeWrite() {
     <div className="container mt-4">
       <div className="notice-layout">
         <div className="notice-card">
-          <h3 className="notice-title">공지사항 작성</h3>
+          <div className="notice-header">
+            <img
+              src="/images/dashboard/icons/write-on.svg"
+              alt="공지사항 작성"
+              className="notice-icon"
+            />
+            <h3 className="notice-title notice-write-title">공지사항 글쓰기</h3>
+          </div>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
