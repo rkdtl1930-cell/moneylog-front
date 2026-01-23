@@ -7,27 +7,27 @@
 
 .notice-layout {
   width: min(1100px, 96%);
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .notice-head {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px; 
+  gap: 10px;
   margin-bottom: 12px;
 }
 
 .notice-title {
-  font-size: 28px;       
+  font-size: 28px;
   font-weight: 500;
   letter-spacing: -0.3px;
-  color: #111;           
+  color: #111;
   margin: 6px 0 14px;
 }
 
 .notice-write-btn {
-  background: #2f6fff;       
+  background: #2f6fff;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -35,14 +35,14 @@
   font-size: 14px;
   font-weight: 400;
   cursor: pointer;
-  align-self: flex-end; 
+  align-self: flex-end;
 }
 
 .notice-table-wrap {
   background: #fff;
   border-radius: 16px;
-  padding: 18px; 
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  padding: 18px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
 }
 
 .notice-table {
@@ -56,7 +56,6 @@
 .notice-table.table-bordered {
   border: 1px solid #e9ecef;
 }
-
 
 .notice-table thead th {
   background: #f8f9fa;
@@ -105,7 +104,7 @@
 /* 페이지네이션 시작 */
 .notice-pagination {
   margin-top: 18px;
-  width: 100%;           
+  width: 100%;
   display: flex;
   justify-content: center;
 }
@@ -142,32 +141,31 @@
   margin-top: 18px;
 }
 
-.notice-actions-right{
-  display:flex;
+.notice-actions-right {
+  display: flex;
   justify-content: flex-end;
-  gap:10px;
+  gap: 10px;
 }
 
 .notice-card {
-  position: relative;     
+  position: relative;
   padding-top: 18px;
 }
 
 .notice-card .btn-notice-back {
   position: absolute;
-  top: 28px;              
+  top: 28px;
   right: 24px;
-  margin: 0 !important; 
+  margin: 0 !important;
 }
 
 .notice-card {
   background: #fff;
   border-radius: 16px;
   padding: 22px 24px;
-  box-shadow: 0 10px 24px rgba(0,0,0,0.06);
-  margin-top: 50px
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+  margin-top: 50px;
 }
-
 
 /* 제목(리스트의 제목과 같은 톤으로) */
 .notice-card .notice-title {
@@ -176,6 +174,7 @@
   letter-spacing: -0.3px;
   color: #111;
   margin: 0 0 10px;
+  margin-bottom: 28px;
 }
 
 /* 작성일 */
@@ -183,7 +182,7 @@
   font-size: 14px;
   color: #6b7280; /* 회색 텍스트 */
   margin-bottom: 18px;
-  padding-right: 120px; 
+  padding-right: 120px;
 }
 
 /* 본문 */
@@ -197,7 +196,13 @@
   border-top: 1px solid #f1f3f5;
 }
 
-/* 버튼 공통 */
+.notice-input::placeholder,
+.notice-textarea::placeholder {
+  color: #9aa3af;
+  font-size: 14px;
+  font-weight: 400;
+}
+
 .btn-notice-primary {
   background: #2f6fff;
   color: #fff;
@@ -228,7 +233,6 @@
   font-weight: 600;
 }
 
-/* 목록으로 버튼(부트스트랩 btn과 섞어 쓰는 스타일) */
 .btn-notice-back {
   background: #2f6fff;
   color: #fff;
@@ -239,7 +243,6 @@
   font-weight: 600;
 }
 
-/* hover 디테일은 나중에 한다고 했으니 최소만 */
 .btn-notice-back:hover {
   color: #fff;
   opacity: 0.95;
@@ -249,6 +252,76 @@
 
 /* Noticewrite 시작 */
 
+/* =========================
+   Notice Write (작성) 폼
+   ========================= */
+
+.notice-card .notice-title {
+  margin-bottom: 22px;
+}
+
+.notice-card .form-label {
+  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 14px;
+}
+
+.notice-card .d-flex.justify-content-between {
+  justify-content: flex-end !important;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.notice-input,
+.notice-textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  padding: 12px 12px;
+  font-size: 15px;
+  outline: none;
+  background: #fff;
+}
+
+.notice-textarea {
+  resize: vertical;
+  min-height: 220px;
+  line-height: 1.6;
+}
+
+/* 포커스 시 대시보드 톤 */
+.notice-input:focus,
+.notice-textarea:focus {
+  border-color: #cfe0ff;
+  box-shadow: 0 0 0 4px rgba(47, 111, 255, 0.12);
+}
+
+/* 작성 폼 간격 */
+.notice-card .mb-3 {
+  margin-bottom: 22px !important;
+}
+
+/* 버튼 톤 통일(이미 있으면 스킵해도 됨) */
+.btn-notice-primary {
+  background: #2f6fff;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.btn-notice-outline {
+  background: #fff;
+  color: #2f6fff;
+  border: 1px solid #9bbcff;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
 
 /* Noticewrite 끝 */
-

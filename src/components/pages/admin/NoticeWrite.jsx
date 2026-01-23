@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import noticeService from '../../services/notice.service';
-import "../landing/notice/Notice.css";
+import '../landing/notice/Notice.css';
 
 export default function NoticeWrite() {
   const [title, setTitle] = useState('');

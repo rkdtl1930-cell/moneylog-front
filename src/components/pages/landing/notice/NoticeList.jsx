@@ -53,9 +53,6 @@ export default function NoticeList() {
       <div className="notice-layout">
         <div className="notice-head">
           <h3 className="notice-title">공지사항</h3>
-          <button className="notice-write-btn" onClick={() => navigate('/notice/write')}>
-            글쓰기
-          </button>
         </div>
 
         <div className="notice-table-wrap">
