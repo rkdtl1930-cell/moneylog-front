@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import noticeService from "../../services/notice.service";
+import "../landing/notice/Notice.css"
 
 export default function NoticeEdit(){
   const {id} = useParams();
   const navigate = useNavigate();
+  
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
