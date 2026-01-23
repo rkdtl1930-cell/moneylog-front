@@ -73,7 +73,7 @@ export default function Login() {
 
     // 관리자면 회원관리로
     if (user.role === 'ADMIN') {
-      navigate('/dashboard/admin');
+      navigate('/dashboard/members');
     } else {
       navigate('/dashboard/main');
     }
@@ -140,7 +140,7 @@ export default function Login() {
 
           <div className="link-box">
             <p>아직 회원이 아니시라면?</p>
-            <Link to="/register" className="btn btn-link">
+            <Link to="/register" className="btn-link">
               회원가입
             </Link>
           </div>

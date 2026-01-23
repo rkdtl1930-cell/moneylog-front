@@ -4,8 +4,10 @@
 .top-navi .leftBox{display: flex; gap: 50px; align-items: center;}
 .top-navi .gnb{display: flex; gap: 20px;}
 .top-navi .gnb a{font-size: 17px; color: #fff;}
+.top-navi.sub .gnb a{color: #333;}
 .top-navi .rightBox ul{display: flex; align-items: center; gap: 20px;}
 .top-navi .rightBox a{font-size: 16px; color: #fff;}
+.top-navi.sub .rightBox a{color: #333;}
 
 
 /* 랜딩페이지 > 메뉴(스크롤 이벤트)*/

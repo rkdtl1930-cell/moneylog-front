@@ -1,8 +1,14 @@
 import { useState } from 'react';
 import './Chatbar.css';
 import chatService from '../../../services/chat.service';
+import useTransactionStore from '../../../store/useTransactionStore';
 
 export default function Chatbar({ isOpen, onToggle }) {
+
+  // ✅ Zustand 훅은 컴포넌트 최상단
+  const triggerRefresh = useTransactionStore(
+    (state) => state.triggerRefresh
+  );
 
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -13,28 +19,36 @@ export default function Chatbar({ isOpen, onToggle }) {
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { id: Date.now(), type: 'user', text: input };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
+    const userText = input;
 
-    // 봇이 응답 중임을 표시
+    // 유저 메시지 먼저 추가
+    setMessages(prev => [
+      ...prev,
+      { id: Date.now(), type: 'user', text: userText }
+    ]);
+    setInput('');
     setIsTyping(true);
 
     try {
-      const res = await chatService.sendMessage(input);
+      const res = await chatService.sendMessage(userText);
 
-      const botMsg = {
-        id: Date.now() + 1,
-        type: 'bot',
-        text: res.data.reply, 
-      };
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: res.data.reply,
+        }
+      ]);
 
-      setMessages(prev => [...prev, botMsg]);
+      // db 저장 성공 시 대시보드 리프레시
+      triggerRefresh();
+
     } catch (err) {
       console.error(err);
       setMessages(prev => [
         ...prev,
-        { id: Date.now() + 2, type: 'bot', text: '에러가 발생' }
+        { id: Date.now() + 2, type: 'bot', text: '에러가 발생했습니다.' }
       ]);
     } finally {
       setIsTyping(false);
@@ -47,42 +61,56 @@ export default function Chatbar({ isOpen, onToggle }) {
         <div className="chat-header">
           <h3>Chat</h3>
           <button className="toggle-btn" onClick={onToggle}>
-            <img 
-              src={isOpen ? '/images/dashboard/arrow-right.svg' : '/images/dashboard/arrow-left.svg'} 
-              alt="" 
+            <img
+              src={
+                isOpen
+                  ? '/images/dashboard/arrow-right.svg'
+                  : '/images/dashboard/arrow-left.svg'
+              }
+              alt=""
             />
           </button>
         </div>
+
         <div className="chat-messages">
           {messages.map(msg => (
             <div key={msg.id} className={`msg ${msg.type}`}>
               {msg.text}
             </div>
           ))}
-          {/* 타이핑 인디케이터 */}
+
           {isTyping && (
             <div className="msg bot">
               <div className="typing-indicator">
                 <div className="cat-thinking">
-                  <img src="/images/landing/cat-eye-open.svg" alt="" className="cat-eye open" />
-                  <img src="/images/landing/cat-eye-closed.svg" alt="" className="cat-eye closed" />
+                  <img
+                    src="/images/landing/cat-eye-open.svg"
+                    alt=""
+                    className="cat-eye open"
+                  />
+                  <img
+                    src="/images/landing/cat-eye-closed.svg"
+                    alt=""
+                    className="cat-eye closed"
+                  />
                 </div>
                 <div className="dots">
-                  <span></span>
-                  <span></span>
-                  <span></span>
+                  <span />
+                  <span />
+                  <span />
                 </div>
               </div>
             </div>
           )}
         </div>
+
         <div className="chat-input">
-          <input 
-            type="text" 
+          <input
+            type="text"
             placeholder="Text Here .."
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+            onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           />
           <button onClick={handleSend}>
             <img src="/images/dashboard/icons/send.svg" alt="" />

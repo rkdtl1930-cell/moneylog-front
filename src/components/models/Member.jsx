@@ -1,5 +1,5 @@
 export default class Member {
-  constructor(username, password, name, role, token, createTime, id){
+  constructor({username, password, name, role, token, createTime, id, nickname}) {
     this.username = username
     this.password = password
     this.name = name
@@ -7,5 +7,6 @@ export default class Member {
     this.token = token
     this.createTime = createTime
     this.id = id
+    this.nickname = nickname
   }
 }
