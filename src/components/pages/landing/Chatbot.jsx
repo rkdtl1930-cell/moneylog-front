@@ -1,10 +1,11 @@
 import { useState, useRef } from 'react';
 import './Chatbot.css';
+import chatService from '../../services/chat.service';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { type: 'bot', text: '안녕하세욥' }
+    { id: 1, type: 'bot', text: '안녕하세요! 무엇이 필요하신가요?' }
   ]);
   const [isTyping, setIsTyping] = useState(false);
   const [input, setInput] = useState('');
@@ -12,21 +13,40 @@ export default function Chatbot() {
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef({ startX: 0, startY: 0 });
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     
-    setMessages([...messages, { type: 'user', text: input }]);
+    const userText = input;
+
+    // 유저 메시지 먼저 추가
+    setMessages(prev => [
+      ...prev, 
+      { id: Date.now(), type: 'user', text: userText }
+    ]);
     setInput('');
-    
-    // 봇 응답 시뮬레이션
     setIsTyping(true);
-    setTimeout(() => {
+
+    try {
+      const res = await chatService.sendMessage(userText);
+
+      setMessages(prev => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          type: 'bot',
+          text: res.data.reply,
+        }
+      ]);
+
+    } catch (err) {
+      console.error(err);
+      setMessages(prev => [
+        ...prev,
+        { id: Date.now() + 2, type: 'bot', text: '에러가 발생했습니다.' }
+      ]);
+    } finally {
       setIsTyping(false);
-      setMessages(prev => [...prev, { 
-        type: 'bot', 
-        text: '메시지답변답변답변답변' 
-      }]);
-    }, 1500);
+    }
   };
 
   const handleMouseDown = (e) => {
@@ -85,8 +105,8 @@ export default function Chatbot() {
           </div>
 
           <div className="chat-messages">
-            {messages.map((msg, i) => (
-              <div key={i} className={`message ${msg.type}`}>
+            {messages.map((msg) => (
+              <div key={msg.id} className={`message ${msg.type}`}>
                 <div className="message-bubble">
                   {msg.text}
                 </div>

@@ -4,8 +4,6 @@ import chatService from '../../../services/chat.service';
 import useTransactionStore from '../../../store/useTransactionStore';
 
 export default function Chatbar({ isOpen, onToggle }) {
-
-  // ✅ Zustand 훅은 컴포넌트 최상단
   const triggerRefresh = useTransactionStore(
     (state) => state.triggerRefresh
   );
