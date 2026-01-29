@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Button, Form, Modal } from "react-bootstrap";
-import logo from "../../../../assets/b_logo.png";
-import useUserStore from "../../../store/useUserStore";
-import budgetService from "../../../services/budget.service";
-import transactionService from "../../../services/transaction.service";
+import { Button, Form, Modal } from 'react-bootstrap';
+import logo from '../../../../assets/b_logo.png';
+import useUserStore from '../../../store/useUserStore';
+import budgetService from '../../../services/budget.service';
+import transactionService from '../../../services/transaction.service';
 import Popup from '../popup/Popup';
 import useBudgetStore from '../../../store/monthlyExpense ';
 import useTransactionStore from '../../../store/useTransactionStore';
@@ -16,39 +16,63 @@ export default function Sidebar() {
 
   // 기본 메뉴
   const baseMenuItems = [
-    { path: '/dashboard/main', iconOff: '/images/dashboard/icons/home-off.svg', iconOn: '/images/dashboard/icons/home-on.svg', label: '대시보드', end: true },
-    { path: '/dashboard/expense', iconOff: '/images/dashboard/icons/expense-off.svg', iconOn: '/images/dashboard/icons/expense-on.svg', label: '지출 내역' },
-    { path: '/dashboard/setting', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '설정' },
+    {
+      path: '/dashboard/main',
+      iconOff: '/images/dashboard/icons/home-off.svg',
+      iconOn: '/images/dashboard/icons/home-on.svg',
+      label: '대시보드',
+      end: true,
+    },
+    {
+      path: '/dashboard/expense',
+      iconOff: '/images/dashboard/icons/expense-off.svg',
+      iconOn: '/images/dashboard/icons/expense-on.svg',
+      label: '지출 내역',
+    },
+    {
+      path: '/dashboard/setting',
+      iconOff: '/images/dashboard/icons/setting-off.svg',
+      iconOn: '/images/dashboard/icons/setting-on.svg',
+      label: '설정',
+    },
   ];
 
   // 관리자 전용 메뉴
   const adminMenuItems = [
-    { path: '/dashboard/admin', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
-    { path: '/dashboard/write', iconOff: '/images/dashboard/icons/write-off.svg', iconOn: '/images/dashboard/icons/write-on.svg', label: '공지사항 글쓰기' },
+    {
+      path: '/dashboard/members',
+      iconOff: '/images/dashboard/icons/setting-off.svg',
+      iconOn: '/images/dashboard/icons/setting-on.svg',
+      label: '회원 관리',
+    },
+    {
+      path: '/dashboard/write',
+      iconOff: '/images/dashboard/icons/write-off.svg',
+      iconOn: '/images/dashboard/icons/write-on.svg',
+      label: '공지사항 글쓰기',
+    },
   ];
 
   // role이 ADMIN이면 관리자 메뉴 추가
-  const menuItems = currentUser?.role === 'ADMIN'
-    ? adminMenuItems
-    : baseMenuItems;
+  const menuItems = currentUser?.role === 'ADMIN' ? adminMenuItems : baseMenuItems;
 
   const [budgets, setBudgets] = useState([]);
   const [showEdit, setShowEdit] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
-  const [newLimit, setNewLimit] = useState("");
+  const [newLimit, setNewLimit] = useState('');
   const [monthlyExpense, setMonthlyExpense] = useState(0);
 
   // 현재 날짜
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-  
+
   // refreshKey (예산 변경 시 다시 불러오기 위함)
-  const refreshKey = useTransactionStore(state => state.refreshKey);
-  const triggerRefresh = useTransactionStore(state => state.triggerRefresh);
-  
+  const refreshKey = useTransactionStore((state) => state.refreshKey);
+  const triggerRefresh = useTransactionStore((state) => state.triggerRefresh);
+
   // Store의 setMonthlyExpense (Dashboard와 동기화)
-  const setMonthlyExpenseToStore = useBudgetStore(state => state.setMonthlyExpense);
+  const setMonthlyExpenseToStore = useBudgetStore((state) => state.setMonthlyExpense);
 
   useEffect(() => {
     if (!mid) return;
@@ -72,10 +96,8 @@ export default function Sidebar() {
         const monthStr = `${year}-${month}`;
         const response = await transactionService.getListByMonth(mid, monthStr, 1, 1000);
         const transactionList = response.data.dtoList || [];
-        const expense = transactionList
-          .filter(t => t.type === 'EXPENSE')
-          .reduce((sum, t) => sum + t.amount, 0);
-        
+        const expense = transactionList.filter((t) => t.type === 'EXPENSE').reduce((sum, t) => sum + t.amount, 0);
+
         setMonthlyExpense(expense);
         setMonthlyExpenseToStore(expense); // Store에도 저장
       } catch (err) {
@@ -89,10 +111,8 @@ export default function Sidebar() {
   }, [mid, refreshKey, setMonthlyExpenseToStore]);
 
   // 이번 달 예산 찾기
-  const currentBudget = budgets.find(
-    (b) => b.year === currentYear && b.month === currentMonth
-  );
-  
+  const currentBudget = budgets.find((b) => b.year === currentYear && b.month === currentMonth);
+
   const openEdit = (budget) => {
     setEditingBudget(budget);
     setNewLimit(budget.limitAmount);
@@ -108,7 +128,7 @@ export default function Sidebar() {
       year: currentYear,
       month: currentMonth,
       limitAmount: 0,
-      usedAmount: 0
+      usedAmount: 0,
     };
     openEdit(budget);
   };
@@ -122,13 +142,13 @@ export default function Sidebar() {
           mid: mid,
           year: editingBudget.year,
           month: editingBudget.month,
-          limitAmount: newLimit
+          limitAmount: newLimit,
         });
       }
-      
+
       // refresh
       triggerRefresh();
-      
+
       closeEdit();
     } catch (err) {
       console.log(err);
@@ -136,15 +156,17 @@ export default function Sidebar() {
   };
 
   // 남은 금액 및 사용률 계산
-  const usedRate = currentBudget
-    ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1)
-    : 0;
+  const usedRate = currentBudget ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1) : 0;
 
   return (
     <aside className="sidebar">
       <div className="con">
         <div className="logo">
-          <h1><NavLink to="/" className="sidebarlogo"><img src={logo} alt="" /></NavLink></h1>
+          <h1>
+            <NavLink to="/" className="sidebarlogo">
+              <img src={logo} alt="" />
+            </NavLink>
+          </h1>
         </div>
 
         <nav className="menu">
@@ -153,7 +175,7 @@ export default function Sidebar() {
               key={item.path}
               to={item.path}
               end={item.end}
-              className={({ isActive }) => isActive ? 'menu-item active' : 'menu-item'}
+              className={({ isActive }) => (isActive ? 'menu-item active' : 'menu-item')}
             >
               {({ isActive }) => (
                 <>
@@ -194,7 +216,8 @@ export default function Sidebar() {
               // 한도 설정 없을시
               <>
                 <p className="empty-text">
-                  {currentMonth}월의 한도가 설정되지 않았어요.<br />
+                  {currentMonth}월의 한도가 설정되지 않았어요.
+                  <br />
                   한도를 설정해주세요.
                 </p>
               </>
@@ -207,14 +230,14 @@ export default function Sidebar() {
                 <div
                   className="progress-fill"
                   style={{
-                    width: `${Math.min(usedRate, 100)}%`, height: '100%',
-                    backgroundColor: usedRate > 50 ? "#f75b50" : "#157AFF"
+                    width: `${Math.min(usedRate, 100)}%`,
+                    height: '100%',
+                    backgroundColor: usedRate > 50 ? '#f75b50' : '#157AFF',
                   }}
                 />
               </div>
               <div className="progress-text">
-                {monthlyExpense.toLocaleString()} /{" "}
-                {currentBudget.limitAmount.toLocaleString()}
+                {monthlyExpense.toLocaleString()} / {currentBudget.limitAmount.toLocaleString()}
               </div>
             </div>
           )}
@@ -224,17 +247,15 @@ export default function Sidebar() {
       <Popup open={showEdit} onClose={closeEdit}>
         <div className="popup-header">
           <h3>예산 설정</h3>
-          <button className="close-btn" onClick={closeEdit}><img src="/images/dashboard/ico-close.svg" alt="" /></button>
+          <button className="close-btn" onClick={closeEdit}>
+            <img src="/images/dashboard/ico-close.svg" alt="" />
+          </button>
         </div>
 
         <div className="popup-body">
-          <div className='form-group'>
+          <div className="form-group">
             <label>예산 금액</label>
-            <input
-              type="number"
-              value={newLimit}
-              onChange={(e) => setNewLimit(e.target.value)}
-            />
+            <input type="number" value={newLimit} onChange={(e) => setNewLimit(e.target.value)} />
           </div>
         </div>
 
@@ -247,7 +268,6 @@ export default function Sidebar() {
           </button>
         </div>
       </Popup>
-
     </aside>
   );
 }

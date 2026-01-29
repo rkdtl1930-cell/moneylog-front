@@ -39,12 +39,29 @@ border-radius: 6px;}
 .common-table .admin > span{color:#E2523F; background: #F9EBE9; padding: 4px; border-radius: 4px;}
 .common-table .user > span{color:#0F65C7; background: #E9F5FF; padding: 4px; border-radius: 4px;}
 
-.pagination{gap:6px; text-align: center; margin-top: 20px;}
+.pagination{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 20px;
+  flex-wrap: nowrap; /* ✅ 2가 아래로 떨어지는 줄바꿈 방지 */
+}
 .page-item{}
 .page-item.active .page-link{background:var(--main-color);color:#fff;border-color:var(--main-color)}
 .page-link{border-radius:8px;padding:6px 12px;color:#555;border:1px solid #ddd;background:#fff}
 .page-link:hover{background:#f2f2f2;color:#000}
 .page-link:focus{box-shadow:none}
+/* 레이아웃 안정화용 (추가) */
+.page-item{
+  list-style: none;
+}
+
+.page-link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
 
 /* 대시보드 */
 .period-wrap{display: flex; gap: 4px; justify-content: space-between;}

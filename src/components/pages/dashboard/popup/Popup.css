@@ -6,7 +6,7 @@
   padding: 24px;max-width: 400px; width: 100%; position: relative;}
 .popup-content .popup-header{margin-bottom: 20px;}
 .popup-content .popup-header h3{font-size: 17px;}
-.popup-content .popup-header .close-btn{position: absolute; top: 20px; right: 20px; font-size: 17px; border: none;}
+.popup-content .popup-header .close-btn{position: absolute; top: 20px; right: 20px; font-size: 17px; border: none; background: transparent;}
 .popup-content .popup-body .form-group{width: 100%; display: flex; gap: 20px; align-items: center; width: 100%;}
 .popup-content .popup-body .popup-info{font-size: 15px; display: block; background: #999; padding: 4px; border-radius: 4px; margin-bottom: 12px;}
 .popup-content .popup-body > div,

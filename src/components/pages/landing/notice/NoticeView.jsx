@@ -10,6 +10,22 @@ export default function NoticeView() {
   const navigate = useNavigate();
   const [notice, setNotice] = useState(null);
   const currentUser = useUserStore((state) => state.user);
+  const isAdmin =
+  currentUser?.role === 'ADMIN' ||
+  currentUser?.isAdmin === true;
+
+    const handleDelete = async () => {
+    if (!window.confirm('삭제할까요?')) return;
+
+    try {
+      await noticeService.deleteNotice(notice.id);
+      alert('삭제되었습니다.');
+      navigate('/notice/list');
+    } catch (err) {
+      console.log(err);
+      alert('삭제에 실패했습니다.');
+    }
+  };
 
   useEffect(() => {
     if (!currentUser?.id) {
@@ -42,24 +58,19 @@ export default function NoticeView() {
             <p className="notice-date">작성일 : {notice.createTime?.substring(0, 10)}</p>
             <div className="notice-content">{notice.content}</div>
             <div className="notice-actions">
-
+            {isAdmin && (
               <div className="notice-actions notice-actions-right">
                 <button className="btn btn-notice-outline" onClick={() => navigate(`/notice/edit/${notice.id}`)}>
                   수정
                 </button>
-                <button
-                  className="btn btn-notice-danger"
-                  onClick={() => {
-                    if (!window.confirm('삭제할까요?')) return;
-                    // TODO: 실제 삭제 API 연결
-                    // await noticeService.deleteNotice(notice.id);
-                    navigate('/notice/list');
-                  }}
-                >
-                  삭제
-                </button>
+                  <button
+                    className="btn btn-notice-danger"
+                    onClick={handleDelete}
+                  >
+                    삭제
+                  </button>
               </div>
-
+            )}
               <button className="btn btn-notice-back mt-3" onClick={() => navigate('/notice/list')}>
                 목록으로
               </button>

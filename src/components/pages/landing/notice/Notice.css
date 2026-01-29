@@ -1,8 +1,16 @@
 /*notice list 시작*/
 
+.notice-layout { padding-top: 90px; }
+
 .notice-page {
   padding-top: 28px;
   padding-bottom: 28px;
+}
+
+.notice-toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
 }
 
 .notice-layout {

@@ -44,7 +44,7 @@ export default function Chatbot() {
         ...prev,
         { id: Date.now() + 2, type: 'bot', text: '에러가 발생했습니다.' }
       ]);
-    } finally {    
+    } finally {
       setIsTyping(false);
     }
   };

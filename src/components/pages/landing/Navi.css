@@ -17,6 +17,7 @@
     -webkit-backdrop-filter: blur(5px); z-index: 10;}
 .top-navi.scrolled .gnb a,
 .top-navi.scrolled .sub a{color: #333;}
+
 .top-navi.scrolled .rightBox a{font-size: 16px; color: #333;}
 
 /* 네비 로고 기본 스타일 */
@@ -39,3 +40,5 @@
 
 .logo a { display: flex; align-items: center; }
 .logo a { text-decoration: none; }
+.top-navi.scrolled .rightBox a{font-size: 16px; color: #333;}
+

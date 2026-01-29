@@ -232,7 +232,7 @@ export default function Home() {
             <div className="con01">
               <p>입력은 간단하게</p>
               <i>
-                <img src="/images/landing/mokup01.png" alt="" />
+                <img src="/images/landing/mokup01.svg" alt="" />
               </i>
             </div>
             <div className="con02">

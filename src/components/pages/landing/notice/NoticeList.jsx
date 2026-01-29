@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import noticeService from '../../../services/notice.service';
 import './Notice.css';
+import Navi from '../Navi';
+import useUserStore from '../../../store/useUserStore';
 
 export default function NoticeList() {
   const [notices, setNotices] = useState([]);
@@ -9,12 +11,18 @@ export default function NoticeList() {
   const [size] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
+  const currentUser = useUserStore((state) => state.user);
+  const isAdmin = currentUser?.role === 'ADMIN' || currentUser?.isAdmin === true;
 
   const fetchData = async () => {
     try {
       const res = await noticeService.getNotices(page, size);
+      console.log('공지사항 첫 번째:', res.data.dtoList?.[0]);
+      console.log('paging raw:', res.data);
+      console.log('page:', res.data.page, 'last:', res.data.last, 'total:', res.data.total);
+
       setNotices(res.data.dtoList || []);
-      setTotalPages(Math.ceil(res.data.total / size));
+      setTotalPages(res.data.last || 1);
     } catch (err) {
       console.log(err);
       setNotices([]);
@@ -50,11 +58,19 @@ export default function NoticeList() {
 
   return (
     <div className="notice-page container mt-4">
+      <Navi />
       <div className="notice-layout">
-        <div className="notice-head">
+        {/* <div className="notice-head">
           <h3 className="notice-title">공지사항</h3>
-        </div>
+        </div> */}
 
+        <div className="notice-toolbar">
+          {isAdmin && (
+            <button className="btn btn-notice-primary" onClick={() => navigate('/notice/write')}>
+              글쓰기
+            </button>
+          )}
+        </div>
         <div className="notice-table-wrap">
           <table className="notice-table table table-bordered">
             <thead className="table-light">
@@ -92,7 +108,7 @@ export default function NoticeList() {
 
         <nav className="notice-pagination" aria-label="Page navigation">
           <ul className="pagination justify-content-center">
-            {page > 1 && (
+            {startPage > 1 && (
               <li className="page-item">
                 <button className="page-link" onClick={handlePrevBlock}>
                   이전
