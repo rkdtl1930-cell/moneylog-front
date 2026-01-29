@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Button, Form, Modal } from "react-bootstrap";
-import logo from "../../../../assets/cashtalk.svg";
+import logo from "../../../../assets/b_logo.png";
 import useUserStore from "../../../store/useUserStore";
 import budgetService from "../../../services/budget.service";
 import Popup from '../popup/Popup';
@@ -128,7 +128,7 @@ export default function Sidebar() {
     <aside className="sidebar">
       <div className="con">
         <div className="logo">
-          <h1><NavLink to="/" className=""><img src={logo} alt="" /></NavLink></h1>
+          <h1><NavLink to="/" className="sidebarlogo"><img src={logo} alt="" /></NavLink></h1>
         </div>
 
         <nav className="menu">

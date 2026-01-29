@@ -30,3 +30,29 @@ color: #fff; padding: 4px 8px; border-radius: 4px; color: #051f2b;}
 
 .main-content .info{padding: 10px 0px; border-bottom: 1px solid #4b4b4b;}
 .welcome-message{font-size: 14px;}
+
+/* ===== Sidebar Logo (layout.css) ===== */
+.sidebar .logo {
+  height: 72px;              /* 로고 영역 높이 고정: 길쭉함 해결 */
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;        /* 좌우 여백 */
+}
+
+.sidebar .logo h1 {
+  margin: 0;
+  line-height: 0;            /* 이미지 주변 여백 줄이기 */
+}
+
+.sidebar .logo a {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar .logo img {
+  height: 26px;              /* 로고 크기 (여기만 조절해도 됨) */
+  width: auto;
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
+}
