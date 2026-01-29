@@ -22,7 +22,8 @@ import useBudgetStore from '../../../store/monthlyExpense ';
 
 const Dashboard = () => {
   const [viewMode, setViewMode] = useState('daily');
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dailySelectedDate, setDailySelectedDate] = useState(new Date());
+  const [monthlySelectedDate, setMonthlySelectedDate] = useState(new Date());
   const [weekDates, setWeekDates] = useState([]);
   const [weekData, setWeekData] = useState({});
   const [transactions, setTransactions] = useState([]);
@@ -53,28 +54,50 @@ const Dashboard = () => {
   const setMonthlyExpense = useBudgetStore(state => state.setMonthlyExpense);
 
   // 대시보드 리프레시
-  const refreshKey = useTransactionStore(
-    (state) => state.refreshKey
-  );
+  const refreshKey = useTransactionStore((state) => state.refreshKey);
+  const triggerRefresh = useTransactionStore((state) => state.triggerRefresh);
+
+  // 예산 정보
+  const [currentBudget, setCurrentBudget] = useState(null);
+
+  // 🔥 현재 달의 지출을 항상 Sidebar에 업데이트
+  useEffect(() => {
+    if (!mid) return;
+    
+    const loadCurrentMonthExpense = async () => {
+      try {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const monthStr = `${year}-${month}`;
+        const response = await transactionService.getListByMonth(mid, monthStr, 1, 1000);
+        const transactionList = response.data.dtoList || [];
+        const expense = transactionList.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + t.amount, 0);
+        setMonthlyExpense(expense);
+      } catch {
+        // 에러 발생 시 무시
+      }
+    };
+    
+    loadCurrentMonthExpense();
+  }, [refreshKey, mid]);
 
   useEffect(() => {
-    setMonthlyExpense(summary.expense);
-  }, [summary.expense]);
-
-
-  useEffect(() => {
-    generateWeekDates(selectedDate);
-  }, [selectedDate]);
+    if (viewMode === 'daily') {
+      generateWeekDates(dailySelectedDate);
+    }
+  }, [dailySelectedDate, viewMode]);
 
   useEffect(() => {
     if (!mid) return;
     if (viewMode === 'daily') {
-      loadWeekData(selectedDate);
-      loadDailyData(selectedDate);
+      loadWeekData(dailySelectedDate);
+      loadDailyData(dailySelectedDate);
     } else {
-      loadMonthlyData(selectedDate);
+      loadMonthlyData(monthlySelectedDate);
+      loadBudgetData(monthlySelectedDate);
     }
-  }, [viewMode, selectedDate, mid, refreshKey]);
+  }, [viewMode, dailySelectedDate, monthlySelectedDate, mid, refreshKey]);
 
   const generateWeekDates = (centerDate) => {
     const dates = [];
@@ -167,6 +190,21 @@ const Dashboard = () => {
     }
   };
 
+  const loadBudgetData = async (date) => {
+    try {
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const budgetService = await import('../../../services/budget.service');
+      const response = await budgetService.default.getBudgets(mid, 1, 12);
+      const budgets = response.data.dtoList || [];
+      const budget = budgets.find(b => b.year === year && b.month === month);
+      setCurrentBudget(budget);
+    } catch (err) {
+      console.log(err);
+      setCurrentBudget(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!category) {
@@ -177,15 +215,19 @@ const Dashboard = () => {
       const payload = { mid: currentUser.id, type, category, date: newTransaction.date, amount: parseInt(newTransaction.amount), memo: newTransaction.memo };
       await transactionService.register(payload);
       alert("등록이 완료되었습니다!");
+      
+      // refreshKey 업데이트로 Sidebar도 새로고침되게 함
+      triggerRefresh();
+      
       setShowModal(false);
       setNewTransaction({ date: '', amount: '', memo: '' });
       setType(TransactionType.INCOME);
       setCategory('');
       if (viewMode === 'daily') {
-        loadWeekData(selectedDate);
-        loadDailyData(selectedDate);
+        loadWeekData(dailySelectedDate);
+        loadDailyData(dailySelectedDate);
       } else {
-        loadMonthlyData(selectedDate);
+        loadMonthlyData(monthlySelectedDate);
       }
     } catch {
       alert("등록에 실패했습니다.");
@@ -198,6 +240,7 @@ const Dashboard = () => {
   };
 
   const openModal = (transactionType) => {
+    const selectedDate = viewMode === 'daily' ? dailySelectedDate : monthlySelectedDate;
     setNewTransaction({ date: formatDate(selectedDate), amount: '', memo: '' });
     setType(transactionType);
     setCategory('');
@@ -226,19 +269,19 @@ const Dashboard = () => {
   };
 
   const changeWeek = (direction) => {
-    const newDate = new Date(selectedDate);
+    const newDate = new Date(dailySelectedDate);
     newDate.setDate(newDate.getDate() + (direction * 7));
-    setSelectedDate(newDate);
+    setDailySelectedDate(newDate);
   };
 
   const changeMonth = (months) => {
-    const newDate = new Date(selectedDate);
+    const newDate = new Date(monthlySelectedDate);
     newDate.setMonth(newDate.getMonth() + months);
-    setSelectedDate(newDate);
+    setMonthlySelectedDate(newDate);
   };
 
-  const getMonthYear = () => {
-    return `${selectedDate.getFullYear()}년 ${selectedDate.getMonth() + 1}월`;
+  const getMonthYear = (date) => {
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월`;
   };
 
   const isSameDay = (date1, date2) => {
@@ -269,7 +312,7 @@ const Dashboard = () => {
           <>
             <div className="card">
               <div className="date-navi">
-                <h2 >{getMonthYear()}</h2>
+                <h2>{getMonthYear(dailySelectedDate)}</h2>
                 <div>
                   <button onClick={() => changeWeek(-1)} disabled={loading}>
                     <img src="/images/dashboard/cal-left.svg" alt="" />
@@ -281,14 +324,14 @@ const Dashboard = () => {
               </div>
               <div className="grid week">
                 {weekDates.map((date, idx) => {
-                  const isSelected = isSameDay(date, selectedDate);
+                  const isSelected = isSameDay(date, dailySelectedDate);
                   const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
                   const isSun = date.getDay() === 0;
                   const isSat = date.getDay() === 6;
                   const dateStr = formatDate(date);
                   const dayData = weekData[dateStr] || { income: 0, expense: 0 };
                   return (
-                    <button key={idx} onClick={() => setSelectedDate(date)} disabled={loading} className={`${isSelected ? 'selected' : isToday(date) ? 'today' : ''}`}>
+                    <button key={idx} onClick={() => setDailySelectedDate(date)} disabled={loading} className={`${isSelected ? 'selected' : isToday(date) ? 'today' : ''}`}>
                       <div className={`day ${isSelected ? 'text-white' : isSun ? 'text-red-500' : isSat ? 'text-blue-500' : 'text-gray-500'}`}>{dayOfWeek}</div>
                       <div className={`number ${isSelected ? 'text-white' : isToday(date) ? 'text-blue-600' : 'text-gray-800'}`}>
                         <p>{date.getDate()}</p>
@@ -367,7 +410,7 @@ const Dashboard = () => {
           <>
             <div className="card">
               <div className="date-navi">
-                <h2>{getMonthYear()}</h2>
+                <h2>{getMonthYear(monthlySelectedDate)}</h2>
                 <div>
                   <button onClick={() => changeMonth(-1)} disabled={loading}>
                     <img src="/images/dashboard/cal-left.svg" alt="" />
@@ -382,8 +425,10 @@ const Dashboard = () => {
             {/* 요약 카드 */}
             <div className="total-box">
               <div className="card">
-                <h5>총 수입</h5>
-                <p className="income">{formatCurrency(summary.income)}</p>
+                <h5>이번달 한도</h5>
+                <p className="income">
+                  {currentBudget ? formatCurrency(currentBudget.limitAmount) : '한도 미설정'}
+                </p>
               </div>
               <div className="card">
                 <h5>총 지출</h5>
@@ -391,8 +436,8 @@ const Dashboard = () => {
               </div>
               <div className="card">
                 <h5>잔액</h5>
-                <p className={summary.income - summary.expense >= 0 ? "income" : "expense"}>
-                  {formatCurrency(summary.income - summary.expense)}
+                <p className={currentBudget && currentBudget.limitAmount - summary.expense >= 0 ? "income" : "expense"}>
+                  {currentBudget ? formatCurrency(currentBudget.limitAmount - summary.expense) : formatCurrency(-summary.expense)}
                 </p>
               </div>
             </div>
@@ -508,12 +553,12 @@ const Dashboard = () => {
                   >
                     <XAxis
                       dataKey="name"
-                      tick={{ fontSize: 18, fontWeight: '600', fill: '#374151' }}  // 색상도 변경 가능
+                      tick={{ fontSize: 18, fontWeight: '600', fill: '#374151' }}
                     />
                     <Tooltip formatter={(v) => formatCurrency(v)} />
                     <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
-                      <Cell fill="#6585F6" />  {/* 수입 - 초록색 */}
-                      <Cell fill="#F765A3" />  {/* 지출 - 빨간색 */}
+                      <Cell fill="#6585F6" />
+                      <Cell fill="#F765A3" />
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>

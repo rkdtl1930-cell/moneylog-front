@@ -4,8 +4,10 @@ import { Button, Form, Modal } from "react-bootstrap";
 import logo from "../../../../assets/b_logo.png";
 import useUserStore from "../../../store/useUserStore";
 import budgetService from "../../../services/budget.service";
+import transactionService from "../../../services/transaction.service";
 import Popup from '../popup/Popup';
 import useBudgetStore from '../../../store/monthlyExpense ';
+import useTransactionStore from '../../../store/useTransactionStore';
 
 export default function Sidebar() {
   const currentUser = useUserStore((state) => state.user);
@@ -21,9 +23,8 @@ export default function Sidebar() {
 
   // 관리자 전용 메뉴
   const adminMenuItems = [
-    { path: '/dashboard/members', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
+    { path: '/dashboard/admin', iconOff: '/images/dashboard/icons/setting-off.svg', iconOn: '/images/dashboard/icons/setting-on.svg', label: '회원 관리' },
     { path: '/dashboard/write', iconOff: '/images/dashboard/icons/write-off.svg', iconOn: '/images/dashboard/icons/write-on.svg', label: '공지사항 글쓰기' },
-
   ];
 
   // role이 ADMIN이면 관리자 메뉴 추가
@@ -35,32 +36,25 @@ export default function Sidebar() {
   const [showEdit, setShowEdit] = useState(false);
   const [editingBudget, setEditingBudget] = useState(null);
   const [newLimit, setNewLimit] = useState("");
+  const [monthlyExpense, setMonthlyExpense] = useState(0);
 
   // 현재 날짜
   const today = new Date();
   const currentYear = today.getFullYear();
   const currentMonth = today.getMonth() + 1;
-
-
-  // 이번달 사용금액
-  const monthlyExpense = useBudgetStore(state => state.monthlyExpense);
-
-  // 예산 가져오기
-  const fetchBudget = async () => {
-    if (!mid) return;
-    try {
-      const res = await budgetService.getBudgets(mid, 1, 12);
-      setBudgets(res.data.dtoList || []);
-    } catch (err) {
-      console.log(err);
-      setBudgets([]);
-    }
-  };
+  
+  // refreshKey (예산 변경 시 다시 불러오기 위함)
+  const refreshKey = useTransactionStore(state => state.refreshKey);
+  const triggerRefresh = useTransactionStore(state => state.triggerRefresh);
+  
+  // Store의 setMonthlyExpense (Dashboard와 동기화)
+  const setMonthlyExpenseToStore = useBudgetStore(state => state.setMonthlyExpense);
 
   useEffect(() => {
     if (!mid) return;
 
-    const fetchBudget = async () => {
+    // 예산 가져오기
+    const loadBudget = async () => {
       try {
         const res = await budgetService.getBudgets(mid, 1, 12);
         setBudgets(res.data.dtoList || []);
@@ -70,15 +64,35 @@ export default function Sidebar() {
       }
     };
 
-    fetchBudget();
-  }, [mid]);
+    // 현재 달의 지출 계산 (Dashboard와 동일한 로직)
+    const loadCurrentMonthExpense = async () => {
+      try {
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const monthStr = `${year}-${month}`;
+        const response = await transactionService.getListByMonth(mid, monthStr, 1, 1000);
+        const transactionList = response.data.dtoList || [];
+        const expense = transactionList
+          .filter(t => t.type === 'EXPENSE')
+          .reduce((sum, t) => sum + t.amount, 0);
+        
+        setMonthlyExpense(expense);
+        setMonthlyExpenseToStore(expense); // Store에도 저장
+      } catch (err) {
+        console.log(err);
+        setMonthlyExpense(0);
+      }
+    };
 
-
+    loadBudget();
+    loadCurrentMonthExpense();
+  }, [mid, refreshKey, setMonthlyExpenseToStore]);
 
   // 이번 달 예산 찾기
   const currentBudget = budgets.find(
     (b) => b.year === currentYear && b.month === currentMonth
   );
+  
   const openEdit = (budget) => {
     setEditingBudget(budget);
     setNewLimit(budget.limitAmount);
@@ -111,7 +125,10 @@ export default function Sidebar() {
           limitAmount: newLimit
         });
       }
-      fetchBudget();
+      
+      // refresh
+      triggerRefresh();
+      
       closeEdit();
     } catch (err) {
       console.log(err);
@@ -122,7 +139,6 @@ export default function Sidebar() {
   const usedRate = currentBudget
     ? ((monthlyExpense / currentBudget.limitAmount) * 100).toFixed(1)
     : 0;
-
 
   return (
     <aside className="sidebar">
