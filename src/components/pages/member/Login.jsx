@@ -3,6 +3,7 @@ import useUserStore from "../../store/useUserStore";
 import { Link, useNavigate } from "react-router-dom";
 import { loginService } from "../../services/auth.service";
 import './Member.css'
+import logoBlue from '../../../assets/b_logo.png';
 
 export default function Login() {
   const [member, setMember] = useState({
@@ -91,6 +92,7 @@ export default function Login() {
   return (
     <>
       <div className='member-wrap'>
+        <img src={logoBlue} alt="TalkPay 로고" className="logo"/>
         <h1>로그인</h1>
         <div className="member">
           {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import memberService from "../../../services/member.service";
 import useUserStore from "../../../store/useUserStore";
+import { Navigate } from "react-router-dom";
 
 export default function MyPage() {
   const currentUser = useUserStore((state) => state.user);
@@ -166,6 +167,31 @@ export default function MyPage() {
     }
   };
 
+  // 회원 삭제
+  const handleDeleteAccount = async () => {
+  const ok = window.confirm(
+    "정말 회원탈퇴 하시겠습니까?\n탈퇴 시 모든 정보가 삭제됩니다."
+  );
+  if (!ok) return;
+
+  try {
+    await memberService.deleteMember(currentUser.id);
+
+    alert("회원탈퇴가 완료되었습니다.");
+
+    // 로그아웃 처리
+    setCurrentUser(null);
+    localStorage.clear();
+
+    // 로그인 페이지로 이동
+    window.location.href = "/login";
+  } catch (err) {
+    console.error(err);
+    alert("회원탈퇴 중 오류가 발생했습니다.");
+  }
+};
+
+
   return (
     <div className="dash-board-con mypage">
       <h3>마이페이지</h3>
@@ -261,6 +287,7 @@ export default function MyPage() {
           {loading ? "수정 중..." : "회원정보 수정"}
         </button>
       </form>
+      <button className="secession-btn" onClick={handleDeleteAccount}>회원탈퇴</button>
     </div>
   );
 }

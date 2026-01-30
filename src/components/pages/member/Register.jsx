@@ -3,6 +3,7 @@ import useUserStore from '../../store/useUserStore';
 import { useNavigate } from 'react-router-dom';
 import { checkUsernameService, registerService } from '../../services/auth.service';
 import './Member.css'
+import logoBlue from '../../../assets/b_logo.png';
 
 export default function Register() {
   // 백엔드 스펙에 맞춘 초기 state
@@ -144,6 +145,7 @@ export default function Register() {
   return (
     <>
       <div className='member-wrap'>
+        <img src={logoBlue} alt="TalkPay 로고" className="logo"/>
         <h1>회원가입</h1>
         <div className="member">
           {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}

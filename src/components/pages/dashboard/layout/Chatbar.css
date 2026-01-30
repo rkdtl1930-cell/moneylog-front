@@ -29,7 +29,7 @@ text-align: left;}
 /* 입력창 */
 .chatbar .chat-input { display: flex; gap: 8px; padding: 12px;background: white; border: 2px solid #ddd; border-radius: 12px;transition: border-color 0.2s;}
 .chatbar .chat-input:focus-within {border-color: var(--main-color); border-width: 1px;}
-.chatbar .chat-input input {flex: 1;border: none;outline: none;font-size: 14px;background: transparent;}
+.chatbar .chat-input input {flex: 1;border: none;outline: none;font-size: 14px;background: transparent; padding: 0;}
 .chatbar .chat-input input::placeholder {color: #999;}
 .chatbar .chat-input button {padding: 8px 16px;background: var(--main-color);border: none;border-radius: 8px;cursor: pointer;
   font-weight: 500;transition: background 0.2s; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;}
