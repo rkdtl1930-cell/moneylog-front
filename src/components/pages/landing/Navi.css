@@ -1,6 +1,7 @@
 /* 랜딩페이지 > 메뉴*/
 .top-navi {padding: 20px 0;  position: absolute; top: 0; left: 0; width: 100%; transition: all .3s;}
-.top-navi .inner{padding: 0 50px; display: flex; align-items: center; justify-content: space-between;}
+.top-navi .inner{padding: 0 12px; display: flex; align-items: center; justify-content: space-between;
+max-width: 1400px; width: 100%; margin: 0 auto;}
 .top-navi .leftBox{display: flex; gap: 50px; align-items: center;}
 .top-navi .gnb{display: flex; gap: 20px;}
 .top-navi .gnb a{font-size: 17px; color: #fff;}
