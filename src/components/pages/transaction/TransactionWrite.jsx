@@ -60,7 +60,7 @@ export default function TransactionWrite(){
   return(<>
     <div className="container mt-4">
       <h3>수입&지출 작성</h3>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>r
         <div className="mb-3">
           <label>수입&지출 날짜</label>
           <input type="date" name="date" className="form-control" value={transaction.date} onChange={handleChange} required/>

@@ -12,9 +12,33 @@ export default function Chatbot() {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const dragRef = useRef({ startX: 0, startY: 0 });
+  
+
+  const examplePrompts = [
+    '오늘 점심에 마라탕 13000원 먹었어.',
+    '이번 주 지출내역 확인해줘',
+    '지난 달 소비가 제일 많았던 카테고리는 뭐야?',
+  ];
+  const PROMPTS_HIDDEN_KEY = 'chatbot_prompts_hidden';
+
+  const [showPrompts, setShowPrompts] = useState(() => {
+    return localStorage.getItem(PROMPTS_HIDDEN_KEY) !== '1';
+  });
+
+
+  // 예시 버튼
+  const handlePromptClick = (text) => {
+    setInput(text);
+
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
+    if (showPrompts) {
+      localStorage.setItem(PROMPTS_HIDDEN_KEY, '1');
+      setShowPrompts(false);
+    }
     
     const userText = input;
 
@@ -72,6 +96,10 @@ export default function Chatbot() {
     setIsDragging(false);
   };
 
+
+
+
+
   return (
     <>
       <button 
@@ -128,6 +156,22 @@ export default function Chatbot() {
               </div>
             )}
           </div>
+
+          {/* ✅ 예시 문구 칩 */}
+          {showPrompts && (
+          <div className="prompt-chips">
+            {examplePrompts.map((text, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="prompt-chip"
+                onClick={() => handlePromptClick(text)}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+          )}  
 
           <div className="chat-input">
             <input 
