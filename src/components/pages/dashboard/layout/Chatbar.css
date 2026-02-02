@@ -37,3 +37,74 @@ text-align: left;}
 .chatbar .chat-messages::-webkit-scrollbar {width: 6px;}
 .chatbar .chat-messages::-webkit-scrollbar-thumb {background: #ddd;border-radius: 3px;}
 .chatbar .chat-messages::-webkit-scrollbar-thumb:hover {background: #ccc;}
+
+/* 예시 문구 칩: 한 줄 가로 스크롤 (대시보드 챗바 전용) */
+.chatbar .prompt-chips {
+  padding: 8px 4px 12px;
+  display: flex;
+  gap: 8px;
+
+  overflow-x: auto;
+  overflow-y: visible; 
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+  background: #fff; 
+}
+
+/* 버튼: 귀여운 볼록 + 파란 포커스 제거 */
+.chatbar .prompt-chip {
+  flex: 0 0 auto;
+  border: 1px solid #e9ecef;
+  background: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.chatbar .prompt-chip:focus,
+.chatbar .prompt-chip:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.chatbar .prompt-chip:hover {
+  transform: translateY(-2px);
+  border-color: #d7dee6;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.chatbar .prompt-chip:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+/* Chatbar(흰 배경)용: 미니멀 스크롤바 */
+.chatbar .prompt-chips::-webkit-scrollbar {
+  height: 6px;
+}
+
+.chatbar .prompt-chips::-webkit-scrollbar-track {
+  background: transparent;   /* ✅ 트랙은 거의 안 보이게 */
+}
+
+.chatbar .prompt-chips::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12); /* ✅ 은은한 회색 */
+  border-radius: 999px;
+}
+
+.chatbar .prompt-chips::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);  /* ✅ hover에서만 존재감 */
+}
+
+/* Firefox */
+.chatbar .prompt-chips {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.18) transparent;
+}

@@ -13,9 +13,30 @@ export default function Chatbar({ isOpen, onToggle }) {
   const [messages, setMessages] = useState([
     { id: 1, type: 'bot', text: '안녕하세요! 오늘 지출을 말씀해주세요' }
   ]);
+  const examplePrompts = [
+    '오늘 점심에 마라탕 13000원 먹었어.',
+    '이번 주 지출내역 확인해줘',
+    '지난 달 소비가 제일 많았던 카테고리는 뭐야?',
+  ];
+
+  const PROMPTS_HIDDEN_KEY = 'chatbar_prompts_hidden';
+
+  const [showPrompts, setShowPrompts] = useState(() => {
+    return localStorage.getItem(PROMPTS_HIDDEN_KEY) !== '1';
+  });  
+
+  const handlePromptClick = (text) => {
+    setInput(text);
+  };
 
   const handleSend = async () => {
     if (!input.trim()) return;
+
+        // 예시 문구 영구 숨김
+    if (showPrompts) {
+      localStorage.setItem(PROMPTS_HIDDEN_KEY, '1');
+      setShowPrompts(false);
+    }
 
     const userText = input;
 
@@ -101,6 +122,21 @@ export default function Chatbar({ isOpen, onToggle }) {
             </div>
           )}
         </div>
+        {/* 예시 문구 칩*/}
+        {showPrompts && (
+          <div className="prompt-chips">
+            {examplePrompts.map((text, idx) => (
+              <button
+                key={idx}
+                type="button"
+                className="prompt-chip"
+                onClick={() => handlePromptClick(text)}
+              >
+                {text}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="chat-input">
           <input
