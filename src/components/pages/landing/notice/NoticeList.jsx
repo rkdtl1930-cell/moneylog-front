@@ -37,7 +37,7 @@ export default function NoticeList() {
     fetch();
   }, [page]);
 
-  const maxButtons = 5;
+  const maxButtons = 2;
   const currentBlock = Math.floor((page - 1) / maxButtons);
   const startPage = currentBlock * maxButtons + 1;
   const endPage = Math.min(startPage + maxButtons - 1, totalPages);

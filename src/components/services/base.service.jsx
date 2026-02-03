@@ -1,10 +1,17 @@
-import useUserStore from "../store/useUserStore"
+import useUserStore from '../store/useUserStore';
 
-const authHeader = () =>{
+const authHeader = () => {
   const currentUser = useUserStore.getState().user;
-  return{
-    'Content-Type':'application/json',
-    authorization : 'Bearer '+currentUser?.token
+
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+
+  if (currentUser && currentUser.token) {
+    headers.Authorization = 'Bearer ' + currentUser.token;
   }
-}
-export {authHeader}
+
+  return headers;
+};
+
+export { authHeader };
